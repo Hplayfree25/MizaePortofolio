@@ -1,0 +1,14 @@
+{
+    "name": "hplayfree25/mizae-portfolio",
+    "description": "Premium Engineering Personal Portfolio for MizaeDev",
+    "type": "project",
+    "license": "MIT",
+    "require": {
+        "php": ">=8.0"
+    },
+    "authors": [
+        {
+            "name": "MizaeDev"
+        }
+    ]
+}
