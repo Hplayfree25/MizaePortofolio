@@ -34,12 +34,9 @@
         </div>
     <?php endif; ?>
 
-    <!-- Pop-up Modal Container -->
     <div id="pj-modal" class="fixed inset-0 z-[9999] flex items-center justify-center p-0 md:p-8 opacity-0 pointer-events-none transition-opacity duration-500">
-        <!-- Overlay Backdrop -->
         <div class="absolute inset-0 bg-black/90 backdrop-blur-xl" onclick="closeProj()"></div>
         
-        <!-- Edge-to-Edge Modal Content -->
         <div class="relative w-full h-full md:h-auto md:max-h-full max-w-6xl bg-[#050505] md:border md:border-white/10 md:rounded-[2rem] transform translate-y-10 sm:translate-y-0 sm:scale-95 opacity-0 transition-all duration-500 shadow-[0_0_100px_rgba(59,130,246,0.15)] flex flex-col md:flex-row overflow-hidden overflow-y-auto" id="pj-modal-content">
             
             <button onclick="closeProj()" class="fixed md:absolute top-4 right-4 md:top-6 md:right-6 w-12 h-12 bg-black/40 hover:bg-black/90 backdrop-blur-md rounded-full flex items-center justify-center text-white transition-colors border border-white/20 group z-[60]">
@@ -81,6 +78,14 @@
         
         document.body.style.overflow = 'hidden';
         
+        // Hide navbar smoothly
+        const nav = document.getElementById('main-nav') || document.querySelector('nav');
+        if(nav) {
+            nav.style.transform = 'translate(-50%, -150%) scale(0.9)';
+            nav.style.opacity = '0';
+            nav.style.pointerEvents = 'none';
+        }
+        
         document.getElementById('pj-modal-title').textContent = p.t;
         document.getElementById('pj-modal-desc').textContent = p.full_d || p.d;
         
@@ -120,6 +125,14 @@
     function closeProj() {
         document.body.style.overflow = '';
         
+        // Show navbar smoothly
+        const nav = document.getElementById('main-nav') || document.querySelector('nav');
+        if(nav) {
+            nav.style.transform = 'translate(-50%, 0) scale(1)';
+            nav.style.opacity = '1';
+            nav.style.pointerEvents = 'auto';
+        }
+        
         const modal = document.getElementById('pj-modal');
         const content = document.getElementById('pj-modal-content');
         
@@ -131,3 +144,4 @@
         }, 500);
     }
 </script>
+

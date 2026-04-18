@@ -18,7 +18,7 @@
     </script>
 </head>
 <body class="antialiased selection:bg-blue-500 selection:text-white relative">
-<nav class="fixed top-6 left-1/2 -translate-x-1/2 glass px-6 md:px-8 py-3 rounded-full z-50 flex gap-4 md:gap-6 items-center shadow-2xl transition-transform hover:scale-105 border border-white/10 w-max max-w-[90vw] overflow-x-auto scb-hidden">
+<nav id="main-nav" class="fixed top-6 left-1/2 -translate-x-1/2 glass px-6 md:px-8 py-3 rounded-full z-50 flex gap-4 md:gap-6 items-center shadow-2xl transition-all duration-500 hover:scale-105 border border-white/10 w-max max-w-[90vw] overflow-x-auto scb-hidden">
     <a href="#hr" class="text-xs md:text-sm font-semibold hover:text-blue-400 transition text-white shrink-0"><?= htmlspecialchars($my['nav_home']) ?></a>
     <a href="#sk" class="text-xs md:text-sm font-semibold hover:text-blue-400 transition text-gray-300 shrink-0"><?= htmlspecialchars($my['nav_skills']) ?></a>
     <a href="#pj" class="text-xs md:text-sm font-semibold hover:text-blue-400 transition text-gray-300 shrink-0"><?= htmlspecialchars($my['nav_projects']) ?></a>

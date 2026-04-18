@@ -4,7 +4,7 @@ $lang = isset($_GET['lang']) && $_GET['lang'] === 'en' ? 'en' : 'id';
 $t = [
     'id' => [
         'name' => 'MizaeDev',
-        'email' => 'hello@mizaedev.com',
+        'email' => 'revaldoanjennurillifanderson@gmail.com',
         'photo' => 'public/prf.png',
         
         'nav_home' => 'Beranda',
@@ -45,7 +45,7 @@ $t = [
     ],
     'en' => [
         'name' => 'MizaeDev',
-        'email' => 'hello@mizaedev.com',
+        'email' => 'revaldoanjennurillifanderson@gmail.com',
         'photo' => 'public/prf.png',
         
         'nav_home' => 'Home',
