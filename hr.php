@@ -1,61 +1,48 @@
-<section id="hr" class="relative min-h-screen flex flex-col justify-center pt-32 md:pt-24 pb-40 md:pb-56 overflow-hidden px-6 lg:px-24">
-    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] h-[90vw] md:w-[50vw] md:h-[50vw] bg-blue-600/20 rounded-full blur-[100px] -z-10 mix-blend-screen pointer-events-none"></div>
-    <div class="absolute bottom-10 right-10 w-[70vw] h-[70vw] md:w-[40vw] md:h-[40vw] bg-pink-600/10 rounded-full blur-[100px] -z-10 mix-blend-screen pointer-events-none"></div>
-    
-    <div class="w-full max-w-7xl flex flex-col md:flex-row items-center justify-between gap-10 md:gap-16 z-10">
-        
-        <div class="reveal order-1 md:order-2 w-full md:w-1/2 flex justify-center items-center relative group mt-8 md:mt-0">
-            
-            <div class="relative w-[220px] h-[220px] sm:w-[280px] sm:h-[360px] md:w-[350px] md:h-[480px] lg:w-[400px] lg:h-[550px] rounded-full sm:rounded-[2rem] md:rounded-[3rem] bg-gradient-to-tr from-blue-500 via-purple-500 to-pink-500 p-1 md:p-1.5 transition-all duration-500 md:group-hover:scale-[1.03] md:group-hover:-rotate-2 group-hover:shadow-[0_20px_50px_-10px_rgba(59,130,246,0.6)] cursor-pointer">
-                
-                <div class="w-full h-full rounded-full sm:rounded-[1.8rem] md:rounded-[2.85rem] overflow-hidden bg-black/50 relative z-10">
-                    <img src="<?= htmlspecialchars($my['photo']) ?>" alt="<?= htmlspecialchars($my['name']) ?>" class="w-full h-full object-cover object-top md:group-hover:scale-110 md:group-hover:rotate-1 transition-all duration-700" onerror="this.src='https://images.unsplash.com/photo-1540569014015-19a7be504e3a?auto=format&fit=crop&q=80&w=400&h=711'">
-                    <div class="absolute inset-0 bg-gradient-to-t from-blue-900/40 to-transparent opacity-0 md:group-hover:opacity-100 transition-opacity duration-500 hidden md:block"></div>
+<section id="hr" class="hero-shell relative min-h-screen overflow-hidden px-4 pb-20 pt-24 sm:px-6 md:px-10 lg:px-24">
+    <div class="hero-grid absolute inset-0 pointer-events-none"></div>
+    <div class="hero-orbit absolute pointer-events-none"></div>
+
+    <div class="relative z-10 mx-auto grid min-h-[calc(100vh-6rem)] w-full max-w-7xl items-center">
+        <div class="hero-stage relative grid min-h-[35rem] items-center overflow-hidden rounded-[1.75rem] border border-white/[0.07] bg-white/[0.015] px-5 py-8 shadow-[0_22px_75px_rgba(0,0,0,0.32)] backdrop-blur-sm sm:min-h-[39rem] sm:px-8 md:px-10 lg:min-h-[40rem] lg:grid-cols-[1.05fr_0.95fr] lg:gap-10 lg:overflow-visible lg:rounded-[2rem] lg:px-12" data-hero-stage>
+            <div class="hero-visual reveal delay-200 absolute right-0 top-14 z-0 w-[34vw] min-w-[7.5rem] max-w-[10rem] sm:right-8 sm:top-10 sm:w-[38vw] sm:max-w-[15.5rem] md:right-12 md:max-w-[18rem] lg:order-2 lg:static lg:z-10 lg:w-full lg:max-w-none lg:justify-self-end">
+                <div class="hero-portrait-card group relative aspect-[4/5] w-full overflow-hidden rounded-[1.45rem] border border-white/[0.12] bg-zinc-950 shadow-[0_20px_60px_rgba(0,0,0,0.42)] sm:rounded-[1.75rem] lg:max-w-[26rem]" data-hero-card>
+                    <img src="<?= htmlspecialchars($my['photo']) ?>" alt="<?= htmlspecialchars($my['name']) ?>" class="h-full w-full object-cover object-top transition duration-700 group-hover:scale-[1.04]">
+                    <div class="hero-photo-tone absolute inset-0"></div>
+                    <div class="hero-card-light absolute inset-0 opacity-0 transition duration-300 group-hover:opacity-100"></div>
+                    <div class="hero-frame-line absolute left-5 right-5 top-5 h-px bg-white/35"></div>
+                    <div class="hero-frame-line absolute bottom-5 left-5 right-5 h-px bg-white/18"></div>
+                    <div class="hero-corner hero-corner-a absolute left-5 top-5"></div>
+                    <div class="hero-corner hero-corner-b absolute bottom-5 right-5"></div>
                 </div>
-                
-                <svg class="hidden md:block absolute top-[15%] left-[20%] text-blue-300 w-12 h-12 opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-125 transition-all duration-[750ms] ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:-translate-y-16 group-hover:-translate-x-16 group-hover:rotate-90 fill-current drop-shadow-[0_10px_20px_rgba(147,197,253,0.8)] z-20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z" fill="currentColor"/>
-                </svg>
-
-                <svg class="hidden md:block absolute top-[20%] right-[15%] text-pink-400 w-16 h-16 opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 transition-all duration-[1000ms] delay-75 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:-translate-y-20 group-hover:translate-x-20 group-hover:rotate-180 fill-current drop-shadow-[0_10px_20px_rgba(236,72,153,0.8)] z-20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z" fill="currentColor"/>
-                </svg>
-
-                <svg class="hidden md:block absolute bottom-[15%] right-[25%] text-purple-400 w-10 h-10 opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-150 transition-all duration-[850ms] delay-150 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:translate-y-12 group-hover:translate-x-12 group-hover:-rotate-90 fill-current drop-shadow-[0_10px_20px_rgba(192,132,252,0.8)] z-20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z" fill="currentColor"/>
-                </svg>
-
             </div>
-            
-        </div>
 
-        <div class="reveal delay-200 order-2 md:order-1 flex flex-col items-center md:items-start gap-5 sm:gap-7 text-center md:text-left w-full md:w-1/2 pt-8 md:pt-0">
-            <h1 class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-[1.1] tracking-tight md:tracking-tighter">
-                <?= htmlspecialchars($my['hero_title_1']) ?> <br>
-                <span class="text-grad"><?= htmlspecialchars($my['hero_title_2']) ?></span>
-            </h1>
-            <p class="text-gray-400 text-sm sm:text-base md:text-lg lg:text-xl font-light max-w-full md:max-w-lg mx-auto md:mx-0 leading-relaxed md:leading-loose">
-                <?= htmlspecialchars($my['hero_desc']) ?>
-            </p>
-            <div class="flex gap-4 items-center mt-2">
-                <a href="#pj" class="px-6 py-3 sm:px-8 sm:py-4 bg-white text-black font-bold text-sm sm:text-base rounded-full hover:bg-transparent hover:text-white hover:border-white border-2 border-white transition-all transform hover:scale-105 hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]">
-                    <?= htmlspecialchars($my['hero_btn']) ?>
-                </a>
+            <div class="reveal relative z-10 flex min-w-0 max-w-[78%] flex-col items-start sm:max-w-[34rem] lg:order-1 lg:max-w-3xl">
+                <div class="hero-kicker mb-5 h-px w-20 bg-white/35"></div>
+
+                <h1 class="hero-title max-w-full text-[clamp(2.45rem,11vw,5.8rem)] font-black leading-[0.92] tracking-normal text-white lg:text-[clamp(5.4rem,7vw,7.6rem)]">
+                    <?= htmlspecialchars($my['hero_title_1']) ?>
+                    <span class="hero-name block"><?= htmlspecialchars($my['hero_title_2']) ?></span>
+                </h1>
+
+                <p class="mt-7 max-w-[33rem] text-sm font-light leading-7 text-zinc-300 sm:text-base sm:leading-8 md:text-lg">
+                    <?= htmlspecialchars($my['hero_desc']) ?>
+                </p>
+
+                <div class="mt-9 flex w-full max-w-xs flex-col gap-3 sm:max-w-none sm:flex-row">
+                    <a href="#pj" class="hero-primary inline-flex min-h-14 items-center justify-center rounded-full px-7 text-sm font-bold text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-cyan-300 focus:ring-offset-2 focus:ring-offset-black sm:text-base">
+                        <?= htmlspecialchars($my['hero_btn']) ?>
+                    </a>
+                    <a href="#sk" class="hero-secondary inline-flex min-h-14 items-center justify-center rounded-full px-7 text-sm font-bold text-white transition duration-300 focus:outline-none focus:ring-2 focus:ring-white/40 focus:ring-offset-2 focus:ring-offset-black sm:text-base">
+                        <?= $lang === 'en' ? 'Skills' : 'Keahlian' ?>
+                    </a>
+                </div>
             </div>
         </div>
-        
     </div>
 
-    <div class="absolute bottom-0 left-0 w-full flex flex-col items-center justify-end z-20 group">
-        <a href="#sk" class="absolute bottom-[50px] sm:bottom-[80px] md:bottom-[120px] flex flex-col items-center gap-1 sm:gap-2 transition-transform duration-500 group-hover:-translate-y-4 cursor-pointer z-30 mb-2">
-            <span class="text-[9px] md:text-[10px] font-bold tracking-[0.3em] uppercase text-gray-500 group-hover:text-blue-400 transition-colors">Scroll</span>
-            <div class="w-5 h-8 md:w-6 md:h-10 border-2 border-white/20 group-hover:border-blue-400 rounded-full flex justify-center p-1 transition-colors backdrop-blur-sm">
-                <div class="w-1 h-2 bg-white/50 group-hover:bg-blue-400 rounded-full animate-[bounce_1.5s_infinite]"></div>
-            </div>
-        </a>
-        
-        <svg class="block w-full h-[50px] sm:h-[80px] md:h-[120px] transition-all duration-[800ms] ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:h-[70px] sm:group-hover:h-[100px] md:group-hover:h-[160px] fill-[#050505] drop-shadow-[0_-5px_15px_rgba(59,130,246,0.15)] group-hover:drop-shadow-[0_-20px_35px_rgba(236,72,153,0.3)]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" preserveAspectRatio="none">
-            <path fill-opacity="1" d="M0,192L48,208C96,224,192,256,288,261.3C384,267,480,245,576,213.3C672,181,768,139,864,144C960,149,1056,203,1152,213.3C1248,224,1344,192,1392,176L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+    <a href="#sk" class="hero-scroll absolute bottom-6 left-1/2 z-20 flex h-12 w-12 -translate-x-1/2 items-center justify-center rounded-full border border-white/15 bg-black/35 text-white/70 backdrop-blur transition duration-300 hover:-translate-y-1 hover:border-cyan-300/70 hover:text-white focus:outline-none focus:ring-2 focus:ring-cyan-300 focus:ring-offset-2 focus:ring-offset-black" aria-label="Scroll">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14m0 0l-6-6m6 6l6-6"></path>
         </svg>
-    </div>
+    </a>
 </section>

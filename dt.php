@@ -3,7 +3,7 @@ $lang = isset($_GET['lang']) && $_GET['lang'] === 'en' ? 'en' : 'id';
 
 $t = [
     'id' => [
-        'name' => 'MizaeDev',
+        'name' => 'Revaldo Anjennu Rillif Anderson',
         'email' => 'revaldoanjennurillifanderson@gmail.com',
         'photo' => 'public/prf.png',
         
@@ -11,8 +11,8 @@ $t = [
         'nav_skills' => 'Keahlian',
         'nav_projects' => 'Proyek',
         
-        'hero_title_1' => 'Hello, I am',
-        'hero_title_2' => 'MizaeDev',
+        'hero_title_1' => 'Hello I am',
+        'hero_title_2' => 'Revaldo Anderson',
         'hero_desc' => 'Saat ini berstatus sebagai Pelajar dan merupakan Mantan Siswa Teknik Instalasi Tenaga Listrik di SMK Kemala Bhayangkari 1 Jakarta',
         'hero_btn' => 'Eksplorasi',
         
@@ -22,8 +22,6 @@ $t = [
         
         'pj_title_1' => 'Karya',
         'pj_title_2' => 'Pilihan',
-        
-        'ft_desc' => 'Semua hak direkayasa untuk performa tertinggi',
         
         'sk_list' => ['PLC', 'Dasar dasar kelistrikan', 'HTML', 'PHP', 'CSS'],
         'pj_list' => [
@@ -44,7 +42,7 @@ $t = [
         ]
     ],
     'en' => [
-        'name' => 'MizaeDev',
+        'name' => 'Revaldo Anjennu Rillif Anderson',
         'email' => 'revaldoanjennurillifanderson@gmail.com',
         'photo' => 'public/prf.png',
         
@@ -52,8 +50,8 @@ $t = [
         'nav_skills' => 'Skills',
         'nav_projects' => 'Projects',
         
-        'hero_title_1' => 'Hello, I am',
-        'hero_title_2' => 'MizaeDev',
+        'hero_title_1' => 'Hello I am',
+        'hero_title_2' => 'Revaldo Anderson',
         'hero_desc' => 'Currently a Student and previously majored in Electrical Installation Engineering at SMK Kemala Bhayangkari 1 Jakarta',
         'hero_btn' => 'Explore',
         
@@ -63,8 +61,6 @@ $t = [
         
         'pj_title_1' => 'Selected',
         'pj_title_2' => 'Works',
-        
-        'ft_desc' => 'All rights engineered for peak performance',
         
         'sk_list' => ['PLC', 'Basic Electrical', 'HTML', 'PHP', 'CSS'],
         'pj_list' => [

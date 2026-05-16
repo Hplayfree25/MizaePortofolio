@@ -1,13 +1,15 @@
-<section id="sk" class="py-32 px-6 lg:px-24 max-w-7xl mx-auto relative z-10">
-    <div class="reveal text-center mb-20">
-        <h2 class="text-4xl md:text-6xl font-black mb-4"><?= htmlspecialchars($my['sk_title_1']) ?> <span class="text-grad"><?= htmlspecialchars($my['sk_title_2']) ?></span></h2>
-        <p class="text-gray-400 max-w-xl mx-auto"><?= htmlspecialchars($my['sk_desc']) ?></p>
+<section id="sk" class="ios-section relative z-10 mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-24">
+    <div class="reveal ios-section-head mx-auto mb-12 max-w-2xl text-center sm:mb-16">
+        <h2 class="text-4xl font-black tracking-normal text-white md:text-6xl"><?= htmlspecialchars($my['sk_title_1']) ?> <span class="text-grad"><?= htmlspecialchars($my['sk_title_2']) ?></span></h2>
+        <p class="mx-auto mt-4 max-w-xl text-sm leading-7 text-zinc-400 sm:text-base"><?= htmlspecialchars($my['sk_desc']) ?></p>
     </div>
-    <div class="flex flex-wrap justify-center gap-4 md:gap-8">
+
+    <div class="ios-card ios-skill-panel reveal grid gap-3 p-3 sm:grid-cols-2 sm:p-4 lg:grid-cols-5" data-ios-card>
         <?php foreach($sk as $index => $s): ?>
-            <div class="reveal glass px-8 py-4 md:px-10 md:py-6 rounded-full font-bold text-lg md:text-2xl hover:-translate-y-3 hover:border-blue-500/50 hover:shadow-[0_20px_40px_rgba(59,130,246,0.3)] transition-all duration-300 cursor-default text-gray-300 hover:text-white" style="transition-delay: <?= $index * 50 ?>ms">
-                <?= htmlspecialchars($s) ?>
-            </div>
+            <button type="button" class="ios-chip reveal group min-h-24 rounded-[1.35rem] px-5 py-5 text-left transition duration-300 focus:outline-none focus:ring-2 focus:ring-cyan-300/70" style="transition-delay: <?= $index * 45 ?>ms" data-skill-chip>
+                <span class="block text-xs font-bold uppercase tracking-[0.18em] text-zinc-500 transition duration-300 group-hover:text-cyan-200">0<?= $index + 1 ?></span>
+                <span class="mt-3 block text-xl font-black text-white transition duration-300 group-hover:translate-x-1"><?= htmlspecialchars($s) ?></span>
+            </button>
         <?php endforeach; ?>
     </div>
 </section>

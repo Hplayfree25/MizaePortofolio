@@ -1,6 +1,6 @@
 {
     "name": "hplayfree25/mizae-portfolio",
-    "description": "Premium Engineering Personal Portfolio for MizaeDev",
+    "description": "Premium Engineering Personal Portfolio for Revaldo Anjennu Rillif Anderson",
     "type": "project",
     "license": "MIT",
     "require": {
@@ -8,7 +8,7 @@
     },
     "authors": [
         {
-            "name": "MizaeDev"
+            "name": "Revaldo Anjennu Rillif Anderson"
         }
     ]
 }
