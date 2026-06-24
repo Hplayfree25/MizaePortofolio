@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revaldo Anjennu Rillif Anderson - Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="sty.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Outfit', 'sans-serif'] },
+                }
+            }
+        }
+    </script>
+</head>
+<body class="antialiased selection:bg-cyan-300 selection:text-black relative">
+<nav id="main-nav" class="site-nav fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-6 lg:px-10">
+    <div class="nav-shell mx-auto w-full max-w-7xl overflow-hidden rounded-[1.35rem] border border-white/[0.09] bg-black/35 shadow-[0_16px_45px_rgba(0,0,0,0.34)] backdrop-blur-2xl">
+        <div class="flex min-h-16 items-center justify-between gap-3 px-4 sm:px-6">
+            <a href="#hr" class="nav-brand group flex min-w-0 max-w-[13rem] items-center sm:max-w-none" aria-label="Beranda" id="nav-brand">
+                <span class="min-w-0">
+                    <span class="block truncate text-sm font-black leading-tight text-white transition duration-300 group-hover:text-cyan-100 sm:text-base">Revaldo Anderson</span>
+                    <span class="block text-[10px] font-bold uppercase tracking-[0.28em] text-zinc-500 transition duration-300 group-hover:text-zinc-300">Portfolio</span>
+                </span>
+            </a>
+
+            <button type="button" class="nav-toggle ios-press group relative z-20 flex h-11 w-11 shrink-0 items-center justify-center rounded-[1.05rem] border border-white/10 bg-white/[0.06] text-white shadow-[0_10px_28px_rgba(0,0,0,0.22)] backdrop-blur-xl transition duration-300 hover:border-white/20 hover:bg-white/[0.10] md:hidden" data-nav-toggle aria-label="Menu" aria-expanded="false">
+                <span class="nav-toggle-lines relative h-4 w-5"></span>
+            </button>
+
+            <div class="nav-desktop hidden items-center gap-2 md:flex">
+                <div class="nav-links relative flex items-center rounded-2xl bg-white/[0.025] p-1" data-nav-links>
+                    <span class="nav-cursor absolute left-1 top-1 h-10 rounded-xl opacity-0 transition-all duration-300" data-nav-cursor></span>
+                    <a href="#hr" class="nav-link active relative z-10 rounded-xl px-4 py-2.5 text-sm font-bold text-white transition duration-300 hover:text-white" data-nav-link id="nav-link-home">Beranda</a>
+                    <a href="#sk" class="nav-link relative z-10 rounded-xl px-4 py-2.5 text-sm font-bold text-zinc-400 transition duration-300 hover:text-white" data-nav-link id="nav-link-skills">Keahlian</a>
+                    <a href="#pj" class="nav-link relative z-10 rounded-xl px-4 py-2.5 text-sm font-bold text-zinc-400 transition duration-300 hover:text-white" data-nav-link id="nav-link-projects">Proyek</a>
+                </div>
+                <div class="flex items-center gap-1 rounded-2xl border border-white/10 bg-white/[0.025] p-1">
+                    <a href="?lang=id" id="lang-btn-id" class="rounded-xl px-3 py-2 text-xs font-black transition">ID</a>
+                    <a href="?lang=en" id="lang-btn-en" class="rounded-xl px-3 py-2 text-xs font-black transition">EN</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-mobile grid max-h-0 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] md:hidden" data-nav-panel>
+            <div class="px-4 pb-4 pt-1">
+                <div class="grid gap-2 rounded-[1.25rem] border border-white/10 bg-white/[0.03] p-2">
+                    <a href="#hr" class="nav-link active rounded-2xl px-4 py-3 text-sm font-bold text-white transition hover:text-white" data-nav-link id="nav-link-mobile-home">Beranda</a>
+                    <a href="#sk" class="nav-link rounded-2xl px-4 py-3 text-sm font-bold text-zinc-400 transition hover:text-white" data-nav-link id="nav-link-mobile-skills">Keahlian</a>
+                    <a href="#pj" class="nav-link rounded-2xl px-4 py-3 text-sm font-bold text-zinc-400 transition hover:text-white" data-nav-link id="nav-link-mobile-projects">Proyek</a>
+                    <div class="mt-1 grid grid-cols-2 gap-2">
+                        <a href="?lang=id" id="lang-btn-mobile-id" class="rounded-2xl px-4 py-3 text-center text-xs font-black transition">ID</a>
+                        <a href="?lang=en" id="lang-btn-mobile-en" class="rounded-2xl px-4 py-3 text-center text-xs font-black transition">EN</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<section id="hr" class="hero-shell relative min-h-screen overflow-hidden px-4 pb-20 pt-24 sm:px-6 md:px-10 lg:px-24">
+    <div class="hero-grid absolute inset-0 pointer-events-none"></div>
+    <div class="hero-orbit absolute pointer-events-none"></div>
+
+    <div class="relative z-10 mx-auto grid min-h-[calc(100vh-6rem)] w-full max-w-7xl items-center">
+        <div class="hero-stage relative grid min-h-[35rem] items-center overflow-hidden rounded-[1.75rem] border border-white/[0.07] bg-white/[0.015] px-5 py-8 shadow-[0_22px_75px_rgba(0,0,0,0.32)] backdrop-blur-sm sm:min-h-[39rem] sm:px-8 md:px-10 lg:min-h-[40rem] lg:grid-cols-[1.05fr_0.95fr] lg:gap-10 lg:overflow-visible lg:rounded-[2rem] lg:px-12" data-hero-stage>
+            <div class="hero-visual reveal delay-200 absolute right-0 top-14 z-0 w-[34vw] min-w-[7.5rem] max-w-[10rem] sm:right-8 sm:top-10 sm:w-[38vw] sm:max-w-[15.5rem] md:right-12 md:max-w-[18rem] lg:order-2 lg:static lg:z-10 lg:w-full lg:max-w-none lg:justify-self-end">
+                <div class="hero-portrait-card group relative aspect-[4/5] w-full overflow-hidden rounded-[1.45rem] border border-white/[0.12] bg-zinc-950 shadow-[0_20px_60px_rgba(0,0,0,0.42)] sm:rounded-[1.75rem] lg:max-w-[26rem]" data-hero-card>
+                    <img id="hero-img" src="" alt="" class="h-full w-full object-cover object-top transition duration-700 group-hover:scale-[1.04]">
+                    <div class="hero-photo-tone absolute inset-0"></div>
+                    <div class="hero-card-light absolute inset-0 opacity-0 transition duration-300 group-hover:opacity-100"></div>
+                    <div class="hero-frame-line absolute left-5 right-5 top-5 h-px bg-white/35"></div>
+                    <div class="hero-frame-line absolute bottom-5 left-5 right-5 h-px bg-white/18"></div>
+                    <div class="hero-corner hero-corner-a absolute left-5 top-5"></div>
+                    <div class="hero-corner hero-corner-b absolute bottom-5 right-5"></div>
+                </div>
+            </div>
+
+            <div class="reveal relative z-10 flex min-w-0 max-w-[78%] flex-col items-start sm:max-w-[34rem] lg:order-1 lg:max-w-3xl">
+                <div class="hero-kicker mb-5 h-px w-20 bg-white/35"></div>
+
+                <h1 class="hero-title max-w-full text-[clamp(2.45rem,11vw,5.8rem)] font-black leading-[0.92] tracking-normal text-white lg:text-[clamp(5.4rem,7vw,7.6rem)]">
+                    <span id="hero-title-1"></span>
+                    <span id="hero-title-2" class="hero-name block"></span>
+                </h1>
+
+                <p id="hero-desc" class="mt-7 max-w-[33rem] text-sm font-light leading-7 text-zinc-300 sm:text-base sm:leading-8 md:text-lg"></p>
+
+                <div class="mt-9 flex w-full max-w-xs flex-col gap-3 sm:max-w-none sm:flex-row">
+                    <a href="#pj" id="hero-btn-explore" class="hero-primary inline-flex min-h-14 items-center justify-center rounded-full px-7 text-sm font-bold text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-cyan-300 focus:ring-offset-2 focus:ring-offset-black sm:text-base"></a>
+                    <a href="#sk" id="hero-btn-skills" class="hero-secondary inline-flex min-h-14 items-center justify-center rounded-full px-7 text-sm font-bold text-white transition duration-300 focus:outline-none focus:ring-2 focus:ring-white/40 focus:ring-offset-2 focus:ring-offset-black sm:text-base"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a href="#sk" class="hero-scroll absolute bottom-6 left-1/2 z-20 flex h-12 w-12 -translate-x-1/2 items-center justify-center rounded-full border border-white/15 bg-black/35 text-white/70 backdrop-blur transition duration-300 hover:-translate-y-1 hover:border-cyan-300/70 hover:text-white focus:outline-none focus:ring-2 focus:ring-cyan-300 focus:ring-offset-2 focus:ring-offset-black" aria-label="Scroll">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14m0 0l-6-6m6 6l6-6"></path>
+        </svg>
+    </a>
+</section>
+
+<section id="sk" class="ios-section relative z-10 mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-24">
+    <div class="reveal ios-section-head mx-auto mb-12 max-w-2xl text-center sm:mb-16">
+        <h2 class="text-4xl font-black tracking-normal text-white md:text-6xl">
+            <span id="sk-title-1"></span> <span id="sk-title-2" class="text-grad"></span>
+        </h2>
+        <p id="sk-desc" class="mx-auto mt-4 max-w-xl text-sm leading-7 text-zinc-400 sm:text-base"></p>
+    </div>
+
+    <div id="sk-grid" class="ios-card ios-skill-panel reveal grid gap-3 p-3 sm:grid-cols-2 sm:p-4 lg:grid-cols-5" data-ios-card></div>
+</section>
+
+<section id="pj" class="ios-section relative z-10 mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-24">
+    <div class="reveal ios-section-head mx-auto mb-12 flex max-w-2xl flex-col items-center text-center sm:mb-16">
+        <h2 class="text-4xl font-black tracking-normal text-white md:text-6xl">
+            <span id="pj-title-1"></span> <span id="pj-title-2" class="text-grad"></span>
+        </h2>
+        <div class="mt-5 h-1 w-20 rounded-full bg-white/20"></div>
+    </div>
+
+    <div id="pj-grid"></div>
+</section>
+
+<div id="pj-modal" class="fixed inset-0 z-[9999] flex items-center justify-center p-3 opacity-0 pointer-events-none transition-opacity duration-500 md:p-8">
+    <div class="absolute inset-0 bg-black/70 backdrop-blur-2xl" onclick="closeProj()"></div>
+
+    <div class="ios-modal relative flex max-h-full w-full max-w-6xl translate-y-8 scale-[0.98] flex-col overflow-hidden rounded-[1.75rem] opacity-0 transition-all duration-500 md:flex-row" id="pj-modal-content">
+        <button onclick="closeProj()" class="absolute right-4 top-4 z-[60] flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.08] text-white backdrop-blur-xl transition duration-300 hover:bg-white/[0.14] focus:outline-none focus:ring-2 focus:ring-cyan-300/70">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+
+        <div id="pj-modal-img-container" class="hidden h-[40vh] w-full shrink-0 bg-black md:h-auto md:min-h-[70vh] md:w-1/2">
+            <img id="pj-modal-img" src="" alt="Project Display" class="h-full w-full object-cover" loading="lazy">
+        </div>
+
+        <div class="flex w-full flex-col overflow-y-auto p-7 md:w-1/2 md:p-12">
+            <div id="pj-modal-icon" class="mb-8 flex h-14 w-14 shrink-0 items-center justify-center rounded-[1.2rem] border border-white/10 bg-white/[0.06] text-cyan-200">
+                <svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+            </div>
+
+            <h3 id="pj-modal-title" class="text-3xl font-black leading-tight tracking-normal text-white md:text-5xl"></h3>
+            <p id="pj-modal-desc" class="mt-7 flex-grow whitespace-pre-line text-base font-light leading-8 text-zinc-300 md:text-lg"></p>
+            <div id="pj-modal-tags" class="mt-8 flex flex-wrap gap-2"></div>
+
+            <button onclick="closeProj()" id="modal-close-btn" class="ios-button mt-10 inline-flex min-h-[3.25rem] w-full items-center justify-center rounded-full px-7 text-sm font-black text-black transition duration-300 sm:w-auto"></button>
+        </div>
+    </div>
+</div>
+
+<footer id="interactive-footer" class="ios-footer professional-footer relative z-10 w-full overflow-hidden px-4 py-16 sm:px-6 lg:px-10">
+    <div class="mx-auto w-full max-w-7xl">
+        <div class="footer-panel grid gap-10 rounded-[1.75rem] border border-white/10 bg-white/[0.035] p-6 backdrop-blur-2xl sm:p-8 lg:grid-cols-[1.2fr_0.8fr_0.8fr] lg:p-10">
+            <div class="max-w-xl">
+                <p class="text-sm font-black text-white">Revaldo Anderson</p>
+                <h2 id="footer-headline" class="mt-5 text-3xl font-black leading-tight tracking-normal text-white sm:text-4xl"></h2>
+                <p id="footer-desc" class="mt-5 text-sm leading-7 text-zinc-400 sm:text-base"></p>
+            </div>
+
+            <div>
+                <p class="footer-label">Navigation</p>
+                <div class="mt-5 grid gap-3">
+                    <a href="#hr" id="footer-nav-home" class="footer-link"></a>
+                    <a href="#sk" id="footer-nav-skills" class="footer-link"></a>
+                    <a href="#pj" id="footer-nav-projects" class="footer-link"></a>
+                </div>
+            </div>
+
+            <div>
+                <p class="footer-label">Contact</p>
+                <div class="mt-5 grid gap-3">
+                    <a href="" id="footer-email" class="footer-link truncate"></a>
+                    <a href="#hr" id="footer-back-to-top" class="footer-link"></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-6 flex flex-col gap-4 rounded-[1.35rem] border border-white/10 bg-white/[0.025] px-5 py-5 text-center backdrop-blur-xl sm:flex-row sm:items-center sm:justify-between sm:text-left">
+            <p id="footer-copyright" class="text-xs font-bold text-zinc-500 sm:text-sm"></p>
+            <p class="text-xs font-bold uppercase tracking-[0.18em] text-zinc-500">
+                Built using HTML, CSS, Tailwind, Vanilla JS
+            </p>
+        </div>
+    </div>
+</footer>
+
+<script src="data.js"></script>
+<script src="scr.js"></script>
+</body>
+</html>
