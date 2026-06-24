@@ -1,11 +1,403 @@
 document.addEventListener('DOMContentLoaded', () => {
+    class PixelGridAnimation {
+        constructor(canvas, contextName) {
+            this.canvas = canvas;
+            this.ctx = canvas.getContext('2d');
+            this.contextName = contextName;
+            this.gridSize = 15;
+            this.cellSize = 8;
+            this.gap = 2;
+            this.padding = 1;
+            
+            canvas.width = 150;
+            canvas.height = 150;
+            
+            this.cells = [];
+            for (let r = 0; r < this.gridSize; r++) {
+                this.cells[r] = [];
+                for (let c = 0; c < this.gridSize; c++) {
+                    this.cells[r][c] = { current: 0, target: 0.08 };
+                }
+            }
+            
+            this.state = 0;
+            this.ticks = 0;
+            this.stateDuration = 180;
+            this.glitchTicks = 0;
+            
+            this.glyphs = {
+                'A': [12, 18, 18, 30, 18, 18, 18],
+                'B': [28, 18, 18, 28, 18, 18, 28],
+                'C': [14, 16, 16, 16, 16, 16, 14],
+                'D': [28, 18, 18, 18, 18, 18, 28],
+                'E': [30, 16, 16, 28, 16, 16, 30],
+                'G': [14, 16, 16, 22, 18, 18, 14],
+                'I': [14, 4, 4, 4, 4, 4, 14],
+                'L': [16, 16, 16, 16, 16, 16, 30],
+                'O': [14, 18, 18, 18, 18, 18, 14],
+                'P': [28, 18, 18, 28, 16, 16, 16],
+                'S': [14, 16, 16, 14, 2, 2, 28],
+                'U': [18, 18, 18, 18, 18, 18, 12],
+                'X': [17, 10, 4, 10, 17, 17, 17],
+                'Y': [17, 10, 4, 4, 4, 4, 4],
+                '0': [14, 19, 21, 25, 18, 18, 14],
+                '1': [4, 12, 4, 4, 4, 4, 14],
+                '2': [14, 18, 2, 4, 8, 16, 30],
+                '⚡': [4, 12, 28, 14, 6, 4, 0],
+                '<': [2, 4, 8, 16, 8, 4, 2],
+                '>': [8, 4, 2, 1, 2, 4, 8],
+                'Δ': [4, 10, 10, 17, 17, 31, 0],
+                '=': [0, 30, 0, 30, 0, 0, 0],
+                ' ': [0, 0, 0, 0, 0, 0, 0]
+            };
+        }
+        
+        triggerTransition() {
+            this.ticks = 0;
+            this.state = 0;
+            this.glitchTicks = 15;
+        }
+        
+        setTarget(r, c, val) {
+            if (r >= 0 && r < this.gridSize && c >= 0 && c < this.gridSize) {
+                this.cells[r][c].target = val;
+            }
+        }
+        
+        clearTargets() {
+            for (let r = 0; r < this.gridSize; r++) {
+                for (let c = 0; c < this.gridSize; c++) {
+                    this.cells[r][c].target = 0.08;
+                }
+            }
+        }
+        
+        drawGlyph(char) {
+            const glyph = this.glyphs[char] || this.glyphs[' '];
+            const startX = 5;
+            const startY = 4;
+            for (let r = 0; r < 7; r++) {
+                const rowVal = glyph[r];
+                for (let c = 0; c < 5; c++) {
+                    const bit = (rowVal >> (4 - c)) & 1;
+                    if (bit) {
+                        this.setTarget(startY + r, startX + c, 0.9);
+                    }
+                }
+            }
+        }
+        
+        update() {
+            if (this.glitchTicks > 0) {
+                this.glitchTicks--;
+                this.clearTargets();
+                for (let i = 0; i < 40; i++) {
+                    const r = Math.floor(Math.random() * this.gridSize);
+                    const c = Math.floor(Math.random() * this.gridSize);
+                    this.setTarget(r, c, Math.random() > 0.4 ? 0.95 : 0.15);
+                }
+                for (let r = 0; r < this.gridSize; r++) {
+                    for (let c = 0; c < this.gridSize; c++) {
+                        const cell = this.cells[r][c];
+                        cell.current += (cell.target - cell.current) * 0.4;
+                    }
+                }
+                this.render();
+                return;
+            }
+
+            this.ticks++;
+            
+            if (this.ticks % this.stateDuration === 0) {
+                this.state = (this.state + 1) % 3;
+            }
+            
+            this.clearTargets();
+            
+            if (this.contextName === 'star-delta') {
+                if (this.state === 0) {
+                    this.drawGlyph('⚡');
+                    if (Math.random() > 0.7) {
+                        for (let r = 0; r < this.gridSize; r++) {
+                            for (let c = 0; c < this.gridSize; c++) {
+                                if (this.cells[r][c].target > 0.5) {
+                                    this.cells[r][c].target = 0.4 + Math.random() * 0.6;
+                                }
+                            }
+                        }
+                    }
+                } else if (this.state === 1) {
+                    this.drawGlyph('Y');
+                } else {
+                    this.drawGlyph('Δ');
+                }
+            } else if (this.contextName === 'plc') {
+                if (this.state === 0) {
+                    const seq = ['P', 'L', 'C'];
+                    const idx = Math.floor(this.ticks / 40) % 3;
+                    this.drawGlyph(seq[idx]);
+                } else if (this.state === 1) {
+                    const center = 7;
+                    const radius = Math.floor(this.ticks / 10) % 8;
+                    for (let r = 0; r < this.gridSize; r++) {
+                        for (let c = 0; c < this.gridSize; c++) {
+                            const dist = Math.max(Math.abs(r - center), Math.abs(c - center));
+                            if (dist === radius) {
+                                this.setTarget(r, c, 0.85);
+                            }
+                        }
+                    }
+                } else {
+                    const col = this.ticks % this.gridSize;
+                    for (let r = 0; r < this.gridSize; r++) {
+                        const val = (Math.sin(r + this.ticks * 0.2) + 1) / 2;
+                        if (val > 0.6) {
+                            this.setTarget(r, col, 0.8);
+                            this.setTarget((r + 5) % this.gridSize, (col + 7) % this.gridSize, 0.8);
+                        }
+                    }
+                }
+            } else if (this.contextName === 'api') {
+                if (this.state === 0) {
+                    const seq = ['A', 'P', 'I'];
+                    const idx = Math.floor(this.ticks / 40) % 3;
+                    this.drawGlyph(seq[idx]);
+                } else if (this.state === 1) {
+                    const row = 7;
+                    const pos = (this.ticks * 2) % (this.gridSize + 4) - 2;
+                    this.setTarget(row, pos, 0.9);
+                    this.setTarget(row, pos - 1, 0.6);
+                    this.setTarget(row, pos - 2, 0.3);
+                    
+                    const row2 = 4;
+                    const pos2 = (this.ticks * 2 + 8) % (this.gridSize + 4) - 2;
+                    this.setTarget(row2, pos2, 0.9);
+                    this.setTarget(row2, pos2 - 1, 0.6);
+                    
+                    const row3 = 10;
+                    const pos3 = (this.ticks * 2 + 4) % (this.gridSize + 4) - 2;
+                    this.setTarget(row3, pos3, 0.9);
+                    this.setTarget(row3, pos3 - 1, 0.6);
+                } else {
+                    this.drawGlyph('<');
+                    this.drawGlyph('>');
+                }
+            } else if (this.contextName === 'db') {
+                if (this.state === 0) {
+                    const seq = ['D', 'B'];
+                    const idx = Math.floor(this.ticks / 60) % 2;
+                    this.drawGlyph(seq[idx]);
+                } else if (this.state === 1) {
+                    const rows = [3, 7, 11];
+                    rows.forEach(r => {
+                        for (let c = 3; c <= 11; c++) {
+                            this.setTarget(r, c, 0.85);
+                        }
+                        this.setTarget(r + 1, 3, 0.85);
+                        this.setTarget(r + 1, 11, 0.85);
+                    });
+                } else {
+                    const scanLine = Math.floor(this.ticks / 6) % this.gridSize;
+                    for (let c = 0; c < this.gridSize; c++) {
+                        this.setTarget(scanLine, c, 0.9);
+                        this.setTarget((scanLine - 1 + this.gridSize) % this.gridSize, c, 0.4);
+                    }
+                }
+            } else if (this.contextName === 'frontend') {
+                if (this.state === 0) {
+                    const seq = ['J', 'S', 'C'];
+                    const idx = Math.floor(this.ticks / 40) % 3;
+                    this.drawGlyph(seq[idx]);
+                } else if (this.state === 1) {
+                    const angle = this.ticks * 0.1;
+                    const cx = 7 + Math.round(Math.cos(angle) * 4);
+                    const cy = 7 + Math.round(Math.sin(angle) * 4);
+                    this.setTarget(cy, cx, 0.95);
+                    this.setTarget(cy - 1, cx, 0.5);
+                    this.setTarget(cy, cx - 1, 0.5);
+                } else {
+                    const center = 7;
+                    const size = Math.floor(this.ticks / 12) % 6;
+                    this.setTarget(center, center, 0.9);
+                    for (let i = 1; i <= size; i++) {
+                        this.setTarget(center - i, center, 0.8);
+                        this.setTarget(center + i, center, 0.8);
+                        this.setTarget(center, center - i, 0.8);
+                        this.setTarget(center, center + i, 0.8);
+                    }
+                }
+            } else if (this.contextName === 'responsive') {
+                if (this.state === 0) {
+                    const seq = ['U', 'X'];
+                    const idx = Math.floor(this.ticks / 60) % 2;
+                    this.drawGlyph(seq[idx]);
+                } else if (this.state === 1) {
+                    const size = 3 + (Math.floor(this.ticks / 10) % 6);
+                    const min = 7 - Math.floor(size / 2);
+                    const max = 7 + Math.floor(size / 2);
+                    for (let i = min; i <= max; i++) {
+                        this.setTarget(min, i, 0.85);
+                        this.setTarget(max, i, 0.85);
+                        this.setTarget(i, min, 0.85);
+                        this.setTarget(i, max, 0.85);
+                    }
+                } else {
+                    for (let r = 2; r <= 12; r++) {
+                        this.setTarget(r, 4, 0.85);
+                        this.setTarget(r, 10, 0.85);
+                    }
+                    for (let c = 4; c <= 10; c++) {
+                        this.setTarget(2, c, 0.85);
+                        this.setTarget(12, c, 0.85);
+                    }
+                    this.setTarget(11, 7, 0.95);
+                }
+            }
+            
+            if (Math.random() > 0.85) {
+                const rx = Math.floor(Math.random() * this.gridSize);
+                const ry = Math.floor(Math.random() * this.gridSize);
+                if (this.cells[ry][rx].target < 0.2) {
+                    this.cells[ry][rx].current = 0.6;
+                }
+            }
+            
+            for (let r = 0; r < this.gridSize; r++) {
+                for (let c = 0; c < this.gridSize; c++) {
+                    const cell = this.cells[r][c];
+                    cell.current += (cell.target - cell.current) * 0.18;
+                }
+            }
+            
+            this.render();
+        }
+        
+        render() {
+            this.ctx.clearRect(0, 0, 150, 150);
+            
+            for (let r = 0; r < this.gridSize; r++) {
+                for (let c = 0; c < this.gridSize; c++) {
+                    const val = this.cells[r][c].current;
+                    const x = this.padding + c * (this.cellSize + this.gap);
+                    const y = this.padding + r * (this.cellSize + this.gap);
+                    
+                    if (val > 0.1) {
+                        this.ctx.fillStyle = `rgba(96, 165, 250, ${val})`;
+                        this.ctx.fillRect(x, y, this.cellSize, this.cellSize);
+                        
+                        if (val > 0.5) {
+                            this.ctx.fillStyle = `rgba(255, 255, 255, ${(val - 0.5) * 2})`;
+                            this.ctx.fillRect(x + 2, y + 2, 4, 4);
+                        }
+                    } else {
+                        this.ctx.fillStyle = `rgba(255, 255, 255, 0.04)`;
+                        this.ctx.fillRect(x, y, this.cellSize, this.cellSize);
+                    }
+                }
+            }
+        }
+    }
+
+    class FluidTextScrambler {
+        constructor(el) {
+            this.el = el;
+            this.chars = '!<>-_\\/[]{}—=+*^?#________';
+            this.tl = null;
+        }
+        setText(newText) {
+            if (this.tl) {
+                this.tl.kill();
+            }
+            const oldText = this.el.innerText;
+            const length = Math.max(oldText.length, newText.length);
+            const promise = new Promise((resolve) => this.resolve = resolve);
+            this.el.innerHTML = '';
+            const spans = [];
+            for (let i = 0; i < length; i++) {
+                const span = document.createElement('span');
+                span.className = 'inline-block';
+                span.style.opacity = oldText[i] ? '1' : '0';
+                span.style.transform = oldText[i] ? 'translateY(0)' : 'translateY(-4px)';
+                const origChar = oldText[i] || ' ';
+                span.textContent = origChar === ' ' ? '\u00A0' : origChar;
+                this.el.appendChild(span);
+                spans.push(span);
+            }
+            this.tl = gsap.timeline({
+                onComplete: () => {
+                    if (newText.length < oldText.length) {
+                        this.el.innerHTML = newText.replace(/ /g, '\u00A0');
+                    }
+                    this.resolve();
+                }
+            });
+            spans.forEach((span, idx) => {
+                const toChar = newText[idx] || '';
+                const delay = idx * 0.03;
+                const scrambleObj = { progress: 0 };
+                this.tl.to(scrambleObj, {
+                    progress: 1,
+                    duration: 0.2,
+                    ease: "none",
+                    onStart: () => {
+                        span.classList.add('text-blue-600', 'font-mono');
+                    },
+                    onUpdate: () => {
+                        span.textContent = this.chars[Math.floor(Math.random() * this.chars.length)];
+                    },
+                    onComplete: () => {
+                        span.classList.remove('text-blue-600', 'font-mono');
+                        const finalChar = toChar || ' ';
+                        span.textContent = finalChar === ' ' ? '\u00A0' : finalChar;
+                    }
+                }, delay);
+                this.tl.to(span, {
+                    opacity: toChar ? 1 : 0,
+                    y: toChar ? 0 : 4,
+                    duration: 0.3,
+                    ease: "power3.out"
+                }, delay + 0.2);
+            });
+            return promise;
+        }
+    }
+
+    let nameScrambler = null;
+    let hoverState = false;
+    let quoteTween = null;
+
+    const initQuoteAnimation = () => {
+        if (quoteTween) {
+            if (quoteTween.scrollTrigger) {
+                quoteTween.scrollTrigger.kill(true);
+            }
+            quoteTween.kill();
+        }
+
+        gsap.set('.quote-phrase', { color: 'rgba(24, 24, 27, 0.15)' });
+
+        const isMobile = window.matchMedia('(max-width: 767px)').matches;
+
+        quoteTween = gsap.to('.quote-phrase', {
+            color: '#18181b',
+            stagger: 0.15,
+            scrollTrigger: {
+                trigger: '#sk-quote',
+                start: isMobile ? 'top 80%' : 'top top',
+                end: isMobile ? 'bottom 40%' : '+=100%',
+                pin: !isMobile,
+                scrub: true
+            }
+        });
+    };
+
     const getLang = () => {
         const params = new URLSearchParams(window.location.search);
         const urlLang = params.get('lang');
         if (urlLang === 'en' || urlLang === 'id') {
             return urlLang;
         }
-        return 'id';
+        return 'en';
     };
 
     const renderLocalization = () => {
@@ -19,79 +411,73 @@ document.addEventListener('DOMContentLoaded', () => {
         const navBrand = document.getElementById('nav-brand');
         if (navBrand) navBrand.setAttribute('aria-label', my.nav_home);
 
-        const linkHome = document.getElementById('nav-link-home');
-        if (linkHome) linkHome.textContent = my.nav_home;
-        const linkSkills = document.getElementById('nav-link-skills');
-        if (linkSkills) linkSkills.textContent = my.nav_skills;
-        const linkProjects = document.getElementById('nav-link-projects');
-        if (linkProjects) linkProjects.textContent = my.nav_projects;
-
-        const linkMobileHome = document.getElementById('nav-link-mobile-home');
-        if (linkMobileHome) linkMobileHome.textContent = my.nav_home;
-        const linkMobileSkills = document.getElementById('nav-link-mobile-skills');
-        if (linkMobileSkills) linkMobileSkills.textContent = my.nav_skills;
-        const linkMobileProjects = document.getElementById('nav-link-mobile-projects');
-        if (linkMobileProjects) linkMobileProjects.textContent = my.nav_projects;
-
-        const updateLangBtnClasses = (btn, isActive) => {
-            if (!btn) return;
-            btn.className = isActive 
-                ? 'rounded-xl px-3 py-2 text-xs font-black transition bg-cyan-300 text-black' 
-                : 'rounded-xl px-3 py-2 text-xs font-black transition text-zinc-400 hover:text-white';
+        const updateRollLink = (id, text) => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.innerHTML = `<span class="nav-link-inner"><span class="nav-link-text">${text}</span><span class="nav-link-text-hover">${text}</span></span>`;
+            }
         };
+        updateRollLink('nav-link-home', my.nav_home);
+        updateRollLink('nav-link-skills', my.nav_skills);
+        updateRollLink('nav-link-projects', my.nav_projects);
+        updateRollLink('nav-link-mobile-home', my.nav_home);
+        updateRollLink('nav-link-mobile-skills', my.nav_skills);
+        updateRollLink('nav-link-mobile-projects', my.nav_projects);
 
-        const updateLangMobileBtnClasses = (btn, isActive) => {
-            if (!btn) return;
-            btn.className = isActive
-                ? 'rounded-2xl px-4 py-3 text-center text-xs font-black transition bg-cyan-300 text-black'
-                : 'rounded-2xl px-4 py-3 text-center text-xs font-black transition bg-white/[0.04] text-zinc-400';
-        };
+        const btnId = document.getElementById('lang-btn-id');
+        const btnEn = document.getElementById('lang-btn-en');
+        const handle = document.getElementById('lang-handle');
 
-        updateLangBtnClasses(document.getElementById('lang-btn-id'), lang === 'id');
-        updateLangBtnClasses(document.getElementById('lang-btn-en'), lang === 'en');
-        updateLangMobileBtnClasses(document.getElementById('lang-btn-mobile-id'), lang === 'id');
-        updateLangMobileBtnClasses(document.getElementById('lang-btn-mobile-en'), lang === 'en');
-
-        const heroImg = document.getElementById('hero-img');
-        if (heroImg) {
-            heroImg.src = my.photo;
-            heroImg.alt = my.name;
+        if (btnId && btnEn && handle) {
+            const globeSvg = handle.querySelector('svg');
+            if (lang === 'id') {
+                btnId.classList.add('text-zinc-800');
+                btnId.classList.remove('text-zinc-400');
+                btnEn.classList.add('text-zinc-400');
+                btnEn.classList.remove('text-zinc-800');
+                gsap.to(handle, { x: 0, duration: 0.4, ease: 'back.out(1.5)' });
+                if (globeSvg) gsap.to(globeSvg, { rotation: 0, duration: 0.45, ease: 'power2.out' });
+            } else {
+                btnId.classList.add('text-zinc-400');
+                btnId.classList.remove('text-zinc-800');
+                btnEn.classList.add('text-zinc-800');
+                btnEn.classList.remove('text-zinc-400');
+                gsap.to(handle, { x: 28, duration: 0.4, ease: 'back.out(1.5)' });
+                if (globeSvg) gsap.to(globeSvg, { rotation: 360, duration: 0.45, ease: 'power2.out' });
+            }
         }
 
-        const heroT1 = document.getElementById('hero-title-1');
-        if (heroT1) heroT1.textContent = my.hero_title_1;
-        const heroT2 = document.getElementById('hero-title-2');
-        if (heroT2) heroT2.textContent = my.hero_title_2;
-        const heroDesc = document.getElementById('hero-desc');
-        if (heroDesc) heroDesc.textContent = my.hero_desc;
+        const heroT2a = document.getElementById('hero-title-2-a');
+        const heroT2b = document.getElementById('hero-title-2-b');
+        if (heroT2a && heroT2b) {
+            const nameParts = my.hero_title_2.split(' ');
+            window.currentNamePartA = nameParts[0] || 'Revaldo';
+            window.currentNamePartB = nameParts[1] || 'Anderson';
+            if (!hoverState) {
+                heroT2a.textContent = window.currentNamePartA;
+                heroT2b.textContent = window.currentNamePartB;
+            }
+        }
 
-        const heroBtnExp = document.getElementById('hero-btn-explore');
-        if (heroBtnExp) heroBtnExp.textContent = my.hero_btn;
-        const heroBtnSk = document.getElementById('hero-btn-skills');
-        if (heroBtnSk) heroBtnSk.textContent = lang === 'en' ? 'Skills' : 'Keahlian';
+        const subLeft = document.getElementById('hero-sub-left');
+        if (subLeft) subLeft.textContent = my.hero_sub_left;
+        const subRight = document.getElementById('hero-sub-right');
+        if (subRight) subRight.textContent = my.hero_sub_right;
 
-        const skT1 = document.getElementById('sk-title-1');
-        if (skT1) skT1.textContent = my.sk_title_1;
-        const skT2 = document.getElementById('sk-title-2');
-        if (skT2) skT2.textContent = my.sk_title_2;
-        const skDesc = document.getElementById('sk-desc');
-        if (skDesc) skDesc.textContent = my.sk_desc;
+        const aboutP1 = document.getElementById('about-p1');
+        if (aboutP1) aboutP1.innerHTML = my.about_p1;
+        const aboutP2 = document.getElementById('about-p2');
+        if (aboutP2) aboutP2.innerHTML = my.about_p2;
 
-        const skGrid = document.getElementById('sk-grid');
-        if (skGrid) {
-            skGrid.innerHTML = my.sk_list.map((s, idx) => `
-                <button type="button" class="ios-chip reveal group min-h-24 rounded-[1.35rem] px-5 py-5 text-left transition duration-300 focus:outline-none focus:ring-2 focus:ring-cyan-300/70" style="transition-delay: ${idx * 45}ms" data-skill-chip>
-                    <span class="block text-xs font-bold uppercase tracking-[0.18em] text-zinc-500 transition duration-300 group-hover:text-cyan-200">0${idx + 1}</span>
-                    <span class="mt-3 block text-xl font-black text-white transition duration-300 group-hover:translate-x-1">${s}</span>
-                </button>
-            `).join('');
+        const aboutBtnText = document.getElementById('about-btn-text');
+        if (aboutBtnText) aboutBtnText.textContent = my.about_btn;
 
-            const skillChips = skGrid.querySelectorAll('[data-skill-chip]');
-            skillChips.forEach(chip => {
-                chip.addEventListener('click', () => {
-                    skillChips.forEach(item => item.classList.remove('is-active'));
-                    chip.classList.add('is-active');
-                });
+        const quoteSpans = document.querySelectorAll('#about-quote .quote-phrase');
+        if (quoteSpans.length && my.quote_phrases) {
+            quoteSpans.forEach((span, idx) => {
+                if (my.quote_phrases[idx]) {
+                    span.textContent = my.quote_phrases[idx];
+                }
             });
         }
 
@@ -100,68 +486,47 @@ document.addEventListener('DOMContentLoaded', () => {
         const pjT2 = document.getElementById('pj-title-2');
         if (pjT2) pjT2.textContent = my.pj_title_2;
 
-        const pjGrid = document.getElementById('pj-grid');
-        if (pjGrid) {
-            if (!my.pj_list || my.pj_list.length === 0) {
-                pjGrid.className = '';
-                pjGrid.innerHTML = `
-                    <div class="ios-card reveal p-10 text-center">
-                        <h3 class="text-2xl font-black text-zinc-400">${lang === 'en' ? 'Coming Soon' : 'Segera Hadir'}</h3>
-                    </div>
-                `;
-            } else {
-                pjGrid.className = 'grid grid-cols-1 gap-4 md:grid-cols-2';
-                pjGrid.innerHTML = my.pj_list.map((p, idx) => `
-                    <button type="button" class="ios-card ios-project-card reveal group flex min-h-[20rem] flex-col items-start overflow-hidden p-5 text-left transition duration-300 focus:outline-none focus:ring-2 focus:ring-cyan-300/70 sm:p-6" style="transition-delay: ${idx * 60}ms" onclick="openProj(${idx})" data-ios-card>
-                        ${p.img ? `
-                            <div class="relative mb-6 aspect-[16/10] w-full overflow-hidden rounded-[1.35rem] bg-black/40">
-                                <img src="${p.img}" alt="${p.t}" class="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]" loading="lazy">
-                                <div class="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent"></div>
-                            </div>
-                        ` : ''}
-                        <div class="flex w-full flex-1 flex-col">
-                            <h3 class="text-2xl font-black tracking-normal text-white transition duration-300 group-hover:text-cyan-100 md:text-3xl">
-                                ${p.t}
-                            </h3>
-                            <p class="mt-4 flex-1 text-sm leading-7 text-zinc-400 sm:text-base">
-                                ${p.d}
-                            </p>
-                            <div class="mt-7 flex flex-wrap gap-2">
-                                ${p.tg.map(tag => `
-                                    <span class="rounded-full border border-white/10 bg-white/[0.045] px-4 py-2 text-xs font-bold text-zinc-300 transition duration-300 group-hover:border-cyan-300/30 group-hover:text-white">
-                                        ${tag}
-                                    </span>
-                                `).join('')}
-                            </div>
-                        </div>
-                    </button>
-                `).join('');
-
-                const pjCards = pjGrid.querySelectorAll('[data-ios-card]');
-                pjCards.forEach(card => {
-                    const moveCard = (e) => {
-                        if (window.matchMedia('(pointer: coarse)').matches) return;
-                        const rect = card.getBoundingClientRect();
-                        const px = (e.clientX - rect.left) / rect.width;
-                        const py = (e.clientY - rect.top) / rect.height;
-                        card.style.setProperty('--ios-tilt-x', `${(px - 0.5) * 5}deg`);
-                        card.style.setProperty('--ios-tilt-y', `${(0.5 - py) * 5}deg`);
-                    };
-
-                    const resetCard = () => {
-                        card.style.setProperty('--ios-tilt-x', '0deg');
-                        card.style.setProperty('--ios-tilt-y', '0deg');
-                    };
-
-                    card.addEventListener('pointermove', moveCard);
-                    card.addEventListener('pointerleave', resetCard);
-                    card.addEventListener('pointercancel', resetCard);
-                });
+        const titleBtns = document.querySelectorAll('.project-title-btn');
+        titleBtns.forEach((btn, idx) => {
+            const p = my.pj_list[idx];
+            if (p) {
+                const textSpan = btn.querySelector('.project-title-text');
+                if (textSpan) textSpan.textContent = p.t;
+                const imgEl = document.getElementById(`pj-img-${idx}`);
+                if (imgEl) imgEl.src = p.img;
             }
-        }
+        });
 
-        const modalCloseBtn = document.getElementById('modal-close-btn');
-        if (modalCloseBtn) modalCloseBtn.textContent = my.close_detail;
+        const pjSub = document.getElementById('pj-subheadline');
+        if (pjSub) pjSub.textContent = my.pj_subheadline;
+
+        const updateText = (id, val) => {
+            const el = document.getElementById(id);
+            if (el) el.textContent = val;
+        };
+        updateText('pj-dark-slide-t0', my.pj_dark_slide_t0);
+        updateText('pj-dark-card-t0-0', my.pj_dark_card_t0_0);
+        updateText('pj-dark-card-d0-0', my.pj_dark_card_d0_0);
+        updateText('pj-dark-card-t0-1', my.pj_dark_card_t0_1);
+        updateText('pj-dark-card-d0-1', my.pj_dark_card_d0_1);
+
+        updateText('pj-dark-slide-t1', my.pj_dark_slide_t1);
+        updateText('pj-dark-card-t1-0', my.pj_dark_card_t1_0);
+        updateText('pj-dark-card-d1-0', my.pj_dark_card_d1_0);
+        updateText('pj-dark-card-t1-1', my.pj_dark_card_t1_1);
+        updateText('pj-dark-card-d1-1', my.pj_dark_card_d1_1);
+
+        updateText('pj-dark-slide-t2', my.pj_dark_slide_t2);
+        updateText('pj-dark-card-t2-0', my.pj_dark_card_t2_0);
+        updateText('pj-dark-card-d2-0', my.pj_dark_card_d2_0);
+        updateText('pj-dark-card-t2-1', my.pj_dark_card_t2_1);
+        updateText('pj-dark-card-d2-1', my.pj_dark_card_d2_1);
+        updateText('expander-label-text', my.dark_expander_label);
+
+        const cursorLabel = document.getElementById('cursor-label-text');
+        if (cursorLabel) {
+            cursorLabel.innerHTML = lang === 'en' ? 'View Work<br>Below' : 'Lihat Karya<br>Di Bawah';
+        }
 
         const ftHeadline = document.getElementById('footer-headline');
         if (ftHeadline) ftHeadline.textContent = my.footer_headline;
@@ -190,9 +555,63 @@ document.addEventListener('DOMContentLoaded', () => {
             const currentYear = new Date().getFullYear();
             ftCopyright.innerHTML = `&copy; ${currentYear} ${my.all_rights_reserved}`;
         }
+
+        ScrollTrigger.refresh();
     };
 
     renderLocalization();
+
+    const toggleBtn = document.getElementById('lang-toggle-btn');
+    if (toggleBtn) {
+        const handle = document.getElementById('lang-handle');
+        
+        toggleBtn.addEventListener('pointerenter', () => {
+            gsap.to(toggleBtn, { scale: 1.08, borderColor: '#a1a1aa', duration: 0.25, ease: 'power2.out' });
+        });
+
+        toggleBtn.addEventListener('pointerleave', () => {
+            gsap.to(toggleBtn, { scale: 1, borderColor: '#e2e8f0', duration: 0.25, ease: 'power2.out' });
+        });
+
+        toggleBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            // springy click squeeze
+            gsap.fromTo(toggleBtn, { scale: 0.9 }, { scale: 1.08, duration: 0.3, ease: 'back.out(2.0)' });
+            
+            const currentLang = document.documentElement.lang || 'id';
+            const nextLang = currentLang === 'id' ? 'en' : 'id';
+            const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?lang=' + nextLang;
+            window.history.pushState({ path: newUrl }, '', newUrl);
+            renderLocalization();
+
+            // spring active label highlight
+            const activeLabel = document.getElementById(`lang-btn-${nextLang}`);
+            if (activeLabel) {
+                gsap.fromTo(activeLabel, { scale: 0.8 }, { scale: 1, duration: 0.4, ease: 'back.out(2.0)' });
+            }
+        });
+    }
+
+    const bindLangLabel = (id, targetLang) => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener('click', (e) => {
+                e.preventDefault();
+                const currentLang = document.documentElement.lang || 'id';
+                if (currentLang !== targetLang) {
+                    // spring active label highlight on click
+                    gsap.fromTo(el, { scale: 0.8 }, { scale: 1, duration: 0.4, ease: 'back.out(2.0)' });
+                    
+                    const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?lang=' + targetLang;
+                    window.history.pushState({ path: newUrl }, '', newUrl);
+                    renderLocalization();
+                }
+            });
+        }
+    };
+    bindLangLabel('lang-btn-id', 'id');
+    bindLangLabel('lang-btn-en', 'en');
 
     const reveals = document.querySelectorAll('.reveal');
     const observer = new IntersectionObserver((entries) => {
@@ -205,32 +624,86 @@ document.addEventListener('DOMContentLoaded', () => {
 
     reveals.forEach(el => observer.observe(el));
 
+    const initSlidingCursor = (wrapSelector, cursorSelector, linkSelector) => {
+        const wrap = document.querySelector(wrapSelector);
+        const cursor = document.querySelector(cursorSelector);
+        if (!wrap || !cursor) return null;
+
+        const setCursor = (link, instant = false) => {
+            if (!link) {
+                gsap.to(cursor, { opacity: 0, duration: 0.2 });
+                return;
+            }
+            const wrapRect = wrap.getBoundingClientRect();
+            const linkRect = link.getBoundingClientRect();
+            
+            gsap.to(cursor, {
+                left: linkRect.left - wrapRect.left,
+                top: linkRect.top - wrapRect.top,
+                width: linkRect.width,
+                height: linkRect.height,
+                opacity: 1,
+                duration: instant ? 0 : 0.35,
+                ease: "power3.out",
+                overwrite: "auto"
+            });
+        };
+
+        const links = wrap.querySelectorAll(linkSelector);
+        links.forEach(link => {
+            link.addEventListener('pointerenter', () => setCursor(link));
+        });
+
+        wrap.addEventListener('pointerleave', () => {
+            const activeLink = wrap.querySelector(`${linkSelector}.active`);
+            if (activeLink) {
+                setCursor(activeLink);
+            } else {
+                gsap.to(cursor, { opacity: 0, duration: 0.2 });
+            }
+        });
+
+        setTimeout(() => {
+            const activeLink = wrap.querySelector(`${linkSelector}.active`);
+            if (activeLink) {
+                setCursor(activeLink, true);
+            }
+        }, 100);
+
+        window.addEventListener('resize', () => {
+            const activeLink = wrap.querySelector(`${linkSelector}.active`);
+            if (activeLink) {
+                setCursor(activeLink, true);
+            }
+        }, { passive: true });
+        
+        return {
+            update: () => {
+                const activeLink = wrap.querySelector(`${linkSelector}.active`);
+                setCursor(activeLink);
+            }
+        };
+    };
+
     const nav = document.getElementById('main-nav');
     const navToggle = document.querySelector('[data-nav-toggle]');
     const navPanel = document.querySelector('[data-nav-panel]');
     const navLinks = document.querySelectorAll('[data-nav-link]');
-    const navCursor = document.querySelector('[data-nav-cursor]');
-    const navLinkWrap = document.querySelector('[data-nav-links]');
 
-    const setNavCursor = (link) => {
-        if (!navCursor || !navLinkWrap || !link || !navLinkWrap.contains(link)) return;
-        const wrapRect = navLinkWrap.getBoundingClientRect();
-        const linkRect = link.getBoundingClientRect();
-        navCursor.style.width = `${linkRect.width}px`;
-        navCursor.style.transform = `translateX(${linkRect.left - wrapRect.left}px)`;
-        navCursor.style.opacity = '1';
-    };
+    let mainNavTracker = null;
+    let langTracker = null;
+
+    mainNavTracker = initSlidingCursor('[data-nav-links]', '[data-nav-cursor]', '[data-nav-link]');
+    langTracker = initSlidingCursor('[data-lang-wrap]', '[data-lang-cursor]', 'a[id^="lang-btn-"]');
 
     const setActiveNav = (id) => {
         navLinks.forEach(link => {
             const active = link.getAttribute('href') === `#${id}`;
             link.classList.toggle('active', active);
-            link.classList.toggle('text-white', active);
-            link.classList.toggle('text-zinc-400', !active);
         });
-
-        const desktopActive = document.querySelector(`.nav-desktop [data-nav-link][href="#${id}"]`);
-        setNavCursor(desktopActive);
+        if (mainNavTracker) {
+            mainNavTracker.update();
+        }
     };
 
     if (nav) {
@@ -243,41 +716,66 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (nav && navToggle && navPanel) {
-        navToggle.addEventListener('click', () => {
-            const open = !nav.classList.contains('menu-open');
+        const line1 = navToggle.querySelector('.line-1');
+        const line2 = navToggle.querySelector('.line-2');
+        const line3 = navToggle.querySelector('.line-3');
+        const toggleIcon = navToggle.querySelector('.nav-toggle-icon');
+
+        let hamburgerTl = gsap.timeline({ paused: true });
+        hamburgerTl.to(line1, { left: 6, duration: 0.15, ease: "power2.in" }, 0)
+                   .to(line3, { left: 10, duration: 0.15, ease: "power2.in" }, 0)
+                   .to(toggleIcon, { rotation: 180, duration: 0.45, ease: "power3.out" }, 0.15)
+                   .to(line1, { left: 0, top: 6, width: 20, height: 2, rotation: 45, transformOrigin: "center center", borderRadius: "1px", duration: 0.45, ease: "back.out(1.2)" }, 0.15)
+                   .to(line2, { opacity: 0, scaleY: 0, height: 0, duration: 0.3, ease: "power3.out" }, 0.15)
+                   .to(line3, { left: 0, top: 6, width: 20, height: 2, rotation: -45, transformOrigin: "center center", borderRadius: "1px", duration: 0.45, ease: "back.out(1.2)" }, 0.15);
+
+        let menuOpen = false;
+        const toggleMenu = (open) => {
+            menuOpen = open;
             nav.classList.toggle('menu-open', open);
             navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+            if (open) {
+                hamburgerTl.play();
+                gsap.killTweensOf(navPanel);
+                gsap.fromTo(navPanel, 
+                    { height: 0, opacity: 0, scale: 0.95 },
+                    { height: "auto", opacity: 1, scale: 1, duration: 0.6, ease: "power3.out", pointerEvents: "auto" }
+                );
+            } else {
+                hamburgerTl.reverse();
+                gsap.killTweensOf(navPanel);
+                gsap.to(navPanel, { 
+                    height: 0, 
+                    opacity: 0, 
+                    scale: 0.95, 
+                    duration: 0.4, 
+                    ease: "power3.inOut", 
+                    pointerEvents: "none" 
+                });
+            }
+        };
+
+        navToggle.addEventListener('click', () => {
+            toggleMenu(!menuOpen);
         });
 
         document.addEventListener('click', (e) => {
-            if (!nav.classList.contains('menu-open')) return;
+            if (!menuOpen) return;
             if (nav.contains(e.target)) return;
-            nav.classList.remove('menu-open');
-            navToggle.setAttribute('aria-expanded', 'false');
+            toggleMenu(false);
         });
 
         document.addEventListener('keydown', (e) => {
             if (e.key !== 'Escape') return;
-            nav.classList.remove('menu-open');
-            navToggle.setAttribute('aria-expanded', 'false');
-        });
-    }
-
-    navLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            if (nav && navToggle) {
-                nav.classList.remove('menu-open');
-                navToggle.setAttribute('aria-expanded', 'false');
-            }
+            toggleMenu(false);
         });
 
-        link.addEventListener('pointerenter', () => setNavCursor(link));
-    });
-
-    if (navLinkWrap) {
-        navLinkWrap.addEventListener('pointerleave', () => {
-            const activeDesktop = document.querySelector('.nav-desktop [data-nav-link].active');
-            setNavCursor(activeDesktop);
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (menuOpen) {
+                    toggleMenu(false);
+                }
+            });
         });
     }
 
@@ -293,11 +791,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         sections.forEach(section => sectionObserver.observe(section));
     }
-
-    window.addEventListener('resize', () => {
-        const activeDesktop = document.querySelector('.nav-desktop [data-nav-link].active');
-        setNavCursor(activeDesktop);
-    }, { passive: true });
 
     const heroStage = document.querySelector('[data-hero-stage]');
     if (heroStage) {
@@ -361,72 +854,424 @@ document.addEventListener('DOMContentLoaded', () => {
         heroCard.addEventListener('pointerleave', resetHeroCard);
         heroCard.addEventListener('pointercancel', resetHeroCard);
     }
-});
 
-window.openProj = function(idx) {
-    const lang = document.documentElement.lang || 'id';
-    const my = portfolioData[lang];
-    const p = my.pj_list[idx];
-    if(!p) return;
-
-    document.body.style.overflow = 'hidden';
-
-    const nav = document.getElementById('main-nav') || document.querySelector('nav');
-    if(nav) {
-        nav.classList.add('nav-hidden');
+    const heroT2a = document.getElementById('hero-title-2-a');
+    const heroT2b = document.getElementById('hero-title-2-b');
+    if (heroT2a && heroT2b) {
+        const nameScramblerA = new FluidTextScrambler(heroT2a);
+        const nameScramblerB = new FluidTextScrambler(heroT2b);
+        const triggerEl = heroT2a.closest('.hero-title-wrapper') || heroT2a.closest('h1') || heroT2a;
+        triggerEl.addEventListener('pointerenter', () => {
+            if (!hoverState) {
+                hoverState = true;
+                triggerEl.classList.add('is-hovered');
+                nameScramblerA.setText('Mizae');
+                nameScramblerB.setText('');
+            }
+        });
+        triggerEl.addEventListener('pointerleave', () => {
+            if (hoverState) {
+                hoverState = false;
+                triggerEl.classList.remove('is-hovered');
+                nameScramblerA.setText(window.currentNamePartA || 'Revaldo');
+                nameScramblerB.setText(window.currentNamePartB || 'Anderson');
+            }
+        });
     }
 
-    document.getElementById('pj-modal-title').textContent = p.t;
-    document.getElementById('pj-modal-desc').textContent = p.full_d || p.d;
-
-    const imgContainer = document.getElementById('pj-modal-img-container');
-    const imgEl = document.getElementById('pj-modal-img');
-    const iconEl = document.getElementById('pj-modal-icon');
-
-    if (p.img) {
-        imgEl.src = p.img;
-        imgContainer.classList.remove('hidden');
-        iconEl.classList.add('hidden');
-    } else {
-        imgEl.src = '';
-        imgContainer.classList.add('hidden');
-        iconEl.classList.remove('hidden');
-    }
-
-    const tagsContainer = document.getElementById('pj-modal-tags');
-    tagsContainer.innerHTML = '';
-    p.tg.forEach(tag => {
-        const span = document.createElement('span');
-        span.className = 'rounded-full border border-cyan-300/20 bg-cyan-300/10 px-4 py-2 text-xs font-bold text-cyan-100';
-        span.textContent = tag;
-        tagsContainer.appendChild(span);
+    const lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smoothWheel: true
     });
 
-    const modal = document.getElementById('pj-modal');
-    const content = document.getElementById('pj-modal-content');
+    lenis.on('scroll', ScrollTrigger.update);
 
-    modal.classList.remove('opacity-0', 'pointer-events-none');
-    setTimeout(() => {
-        content.classList.remove('scale-[0.98]', 'opacity-0', 'translate-y-8');
-        content.classList.add('scale-100', 'opacity-100', 'translate-y-0');
-    }, 30);
-};
+    gsap.ticker.add((time) => {
+        lenis.raf(time * 1000);
+    });
 
-window.closeProj = function() {
-    document.body.style.overflow = '';
+    gsap.ticker.lagSmoothing(0);
 
-    const nav = document.getElementById('main-nav') || document.querySelector('nav');
-    if(nav) {
-        nav.classList.remove('nav-hidden');
+    gsap.to('.hero-shell > div:not(.hero-grid)', {
+        y: -100,
+        opacity: 0,
+        ease: 'none',
+        scrollTrigger: {
+            trigger: '#hr',
+            start: 'top top',
+            end: 'bottom 40%',
+            scrub: true
+        }
+    });
+
+    gsap.to('.hero-grid', {
+        y: 120,
+        ease: 'none',
+        scrollTrigger: {
+            trigger: '#hr',
+            start: 'top top',
+            end: 'bottom top',
+            scrub: true
+        }
+    });
+
+    const aboutSk = document.getElementById('sk');
+    if (aboutSk) {
+        gsap.set('.about-title', { opacity: 0, y: -20 });
+        gsap.set('.about-p1', { opacity: 0, x: -30 });
+        gsap.set('.about-img-container', { opacity: 0, scale: 0.75, y: 30 });
+        gsap.set('.about-p2', { opacity: 0, x: 30 });
+        gsap.set('.about-btn', { opacity: 0, y: 20 });
+
+        const skTl = gsap.timeline({
+            scrollTrigger: {
+                trigger: '#sk',
+                start: 'top 95%',
+                end: 'bottom 40%',
+                scrub: 0.6
+            }
+        });
+
+        skTl.to('.about-img-container', { opacity: 1, scale: 1, y: 0, duration: 1.5, ease: 'power2.out' }, 0)
+            .to('.about-title', { opacity: 1, y: 0, duration: 1.0, ease: 'power2.out' }, 0.2)
+            .to('.about-p1', { opacity: 1, x: 0, duration: 1.2, ease: 'power2.out' }, 0.4)
+            .to('.about-p2', { opacity: 1, x: 0, duration: 1.2, ease: 'power2.out' }, 0.4)
+            .to('.about-btn', { opacity: 1, y: 0, duration: 1.0, ease: 'power2.out' }, 0.6);
     }
 
-    const modal = document.getElementById('pj-modal');
-    const content = document.getElementById('pj-modal-content');
+    initQuoteAnimation();
 
-    content.classList.remove('scale-100', 'opacity-100', 'translate-y-0');
-    content.classList.add('scale-[0.98]', 'opacity-0', 'translate-y-8');
+    const aboutBtn = document.querySelector('[data-about-btn]');
+    if (aboutBtn) {
+        const fill = aboutBtn.querySelector('.about-btn-fill');
+        const arrow = aboutBtn.querySelector('[data-about-arrow]');
+        
+        gsap.set(fill, { xPercent: -100, yPercent: 100 });
+        
+        aboutBtn.addEventListener('mouseenter', () => {
+            gsap.killTweensOf([fill, arrow]);
+            gsap.to(fill, { xPercent: 0, yPercent: 0, duration: 0.3, ease: 'power2.out' });
+            
+            gsap.timeline()
+                .to(arrow, { x: 15, y: -15, opacity: 0, duration: 0.15, ease: 'power2.in' })
+                .set(arrow, { x: -15, y: 15, color: '#ffffff' })
+                .to(arrow, { x: 0, y: 0, opacity: 1, duration: 0.25, ease: 'power3.out' });
+        });
+        
+        aboutBtn.addEventListener('mouseleave', () => {
+            gsap.killTweensOf([fill, arrow]);
+            gsap.to(fill, { xPercent: -100, yPercent: 100, duration: 0.3, ease: 'power2.out' });
+            
+            gsap.timeline()
+                .to(arrow, { x: -15, y: 15, opacity: 0, duration: 0.15, ease: 'power2.in' })
+                .set(arrow, { x: -15, y: 15, color: '#71717a' })
+                .to(arrow, { x: 0, y: 0, opacity: 1, duration: 0.25, ease: 'power3.out' });
+        });
+    }
 
-    setTimeout(() => {
-        modal.classList.add('opacity-0', 'pointer-events-none');
-    }, 500);
-};
+    const titleBtns = document.querySelectorAll('.project-title-btn');
+    const slides = document.querySelectorAll('.project-image-slide');
+    const imageBox = document.querySelector('[data-project-image-box]');
+    const customCursor = document.querySelector('[data-custom-cursor]');
+    const overlay = document.querySelector('[data-project-overlay]');
+
+    if (titleBtns.length && slides.length && imageBox && customCursor && overlay) {
+        gsap.set(overlay, { yPercent: 100 });
+
+        titleBtns.forEach((btn, idx) => {
+            const txt = btn.querySelector('.project-title-text');
+            if (idx === 0) {
+                gsap.set(txt, { color: '#18181b', scale: 1.0, opacity: 1, transformOrigin: 'left center' });
+            } else {
+                gsap.set(txt, { color: '#a1a1aa', scale: 0.85, opacity: 0.4, transformOrigin: 'left center' });
+            }
+        });
+
+        const pjTimeline = gsap.timeline({
+            scrollTrigger: {
+                trigger: '#pj',
+                start: 'top top',
+                end: '+=150%',
+                pin: true,
+                scrub: 0.4,
+                anticipatePin: 1
+            }
+        });
+
+        pjTimeline.to(overlay, { yPercent: 0, duration: 0.4, ease: 'power1.inOut' }, 0);
+        
+        pjTimeline.set(slides[0], { opacity: 0, zIndex: 9 }, 0.45);
+        pjTimeline.set(slides[1], { opacity: 1, zIndex: 10 }, 0.45);
+        pjTimeline.set(slides[2], { opacity: 0, zIndex: 9 }, 0.45);
+        
+        pjTimeline.to(overlay, { yPercent: -100, duration: 0.4, ease: 'power1.inOut' }, 0.5);
+        pjTimeline.set(overlay, { yPercent: 100 }, 0.9);
+        
+        pjTimeline.to(titleBtns[0].querySelector('.project-title-text'), { color: '#a1a1aa', scale: 0.85, opacity: 0.4, duration: 0.45, ease: 'power2.inOut' }, 0);
+        pjTimeline.to(titleBtns[1].querySelector('.project-title-text'), { color: '#18181b', scale: 1.0, opacity: 1, duration: 0.45, ease: 'power2.inOut' }, 0.45);
+
+        pjTimeline.to(overlay, { yPercent: 0, duration: 0.4, ease: 'power1.inOut' }, 1.1);
+        
+        pjTimeline.set(slides[0], { opacity: 0, zIndex: 9 }, 1.55);
+        pjTimeline.set(slides[1], { opacity: 0, zIndex: 9 }, 1.55);
+        pjTimeline.set(slides[2], { opacity: 1, zIndex: 10 }, 1.55);
+        
+        pjTimeline.to(overlay, { yPercent: -100, duration: 0.4, ease: 'power1.inOut' }, 1.6);
+        pjTimeline.set(overlay, { yPercent: 100 }, 2.0);
+
+        pjTimeline.to(titleBtns[1].querySelector('.project-title-text'), { color: '#a1a1aa', scale: 0.85, opacity: 0.4, duration: 0.45, ease: 'power2.inOut' }, 1.1);
+        pjTimeline.to(titleBtns[2].querySelector('.project-title-text'), { color: '#18181b', scale: 1.0, opacity: 1, duration: 0.45, ease: 'power2.inOut' }, 1.55);
+
+        pjTimeline.to({}, { duration: 0.8 }, 2.0);
+
+        titleBtns.forEach((btn, index) => {
+            btn.addEventListener('click', () => {
+                const trigger = pjTimeline.scrollTrigger;
+                if (!trigger) return;
+                
+                const progress = trigger.progress;
+                let activeIdx = 0;
+                if (progress > 0.366 && progress <= 0.733) {
+                    activeIdx = 1;
+                } else if (progress > 0.733) {
+                    activeIdx = 2;
+                }
+
+                if (index === activeIdx) {
+                    lenis.scrollTo('#interactive-footer', { duration: 1.2 });
+                } else {
+                    const start = trigger.start;
+                    const end = trigger.end;
+                    const total = end - start;
+                    let targetScroll = start;
+                    if (index === 1) {
+                        targetScroll = start + total * (1.2 / 2.8);
+                    } else if (index === 2) {
+                        targetScroll = start + total * (2.4 / 2.8);
+                    }
+                    lenis.scrollTo(targetScroll, { duration: 1.2 });
+                }
+            });
+        });
+
+        imageBox.addEventListener('click', () => {
+            lenis.scrollTo('#interactive-footer', { duration: 1.2 });
+        });
+
+        if (!window.matchMedia('(pointer: coarse)').matches) {
+            gsap.set(customCursor, { xPercent: -50, yPercent: -50, scale: 0, opacity: 0 });
+
+            imageBox.addEventListener('pointerenter', () => {
+                gsap.killTweensOf(customCursor);
+                gsap.to(customCursor, { scale: 1, opacity: 1, duration: 0.15, ease: 'power1.out' });
+            });
+
+            imageBox.addEventListener('pointerleave', () => {
+                gsap.killTweensOf(customCursor);
+                gsap.to(customCursor, { scale: 0, opacity: 0, duration: 0.15, ease: 'power1.in' });
+            });
+
+            imageBox.addEventListener('pointermove', (e) => {
+                const rect = imageBox.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                gsap.set(customCursor, { x: x, y: y });
+            });
+        } else {
+            gsap.set(customCursor, { display: 'none' });
+        }
+    }
+
+    const darkExpander = document.getElementById('pj-dark-expander');
+    if (darkExpander) {
+        const isMobile = window.matchMedia('(max-width: 767px)').matches;
+        const initWidth = isMobile ? '90%' : '75%';
+        const initHeight = isMobile ? '50vh' : '65vh';
+        const initRadius = isMobile ? '2rem' : '3.5rem';
+
+        const growTl = gsap.timeline({
+            scrollTrigger: {
+                trigger: '#pj-dark-section',
+                start: 'top bottom',
+                end: 'top top',
+                scrub: 0.5
+            }
+        });
+
+        growTl.fromTo(darkExpander, 
+            { width: initWidth, height: initHeight, borderRadius: initRadius },
+            {
+                width: '100%',
+                height: '100vh',
+                borderRadius: '0px',
+                ease: 'none',
+                duration: 1.0
+            }
+        )
+        .to('#pj-dark-expander-label', {
+            opacity: 0,
+            scale: 0.8,
+            duration: 0.5,
+            ease: 'power2.out'
+        }, 0);
+
+        gsap.set('.pj-dark-slide', { opacity: 0, y: 0, pointerEvents: 'none' });
+        gsap.set('#dark-slide-0', { opacity: 1, pointerEvents: 'auto' });
+
+        let currentActiveSlide = 0;
+
+        const darkTl = gsap.timeline({
+            scrollTrigger: {
+                trigger: '#pj-dark-section',
+                start: 'top top',
+                end: '+=200%',
+                pin: true,
+                scrub: 0.5,
+                onUpdate: (self) => {
+                    const progress = self.progress;
+                    let activeIdx = 0;
+                    if (progress > 0.238 && progress <= 0.476) {
+                        activeIdx = 1;
+                    } else if (progress > 0.476) {
+                        activeIdx = 2;
+                    }
+
+                    if (activeIdx !== currentActiveSlide) {
+                        currentActiveSlide = activeIdx;
+                        
+                        const lang = getLang();
+                        const my = portfolioData[lang];
+                        if (!my) return;
+
+                        const scrambleText = (id, targetText) => {
+                            const el = document.getElementById(id);
+                            if (!el) return;
+                            if (!el.scrambler) {
+                                el.scrambler = new FluidTextScrambler(el);
+                            }
+                            el.scrambler.setText(targetText);
+                        };
+
+                        if (activeIdx === 0) {
+                            scrambleText('pj-dark-slide-t0', my.pj_dark_slide_t0);
+                            scrambleText('pj-dark-card-t0-0', my.pj_dark_card_t0_0);
+                            scrambleText('pj-dark-card-d0-0', my.pj_dark_card_d0_0);
+                            scrambleText('pj-dark-card-t0-1', my.pj_dark_card_t0_1);
+                            scrambleText('pj-dark-card-d0-1', my.pj_dark_card_d0_1);
+                        } else if (activeIdx === 1) {
+                            scrambleText('pj-dark-slide-t1', my.pj_dark_slide_t1);
+                            scrambleText('pj-dark-card-t1-0', my.pj_dark_card_t1_0);
+                            scrambleText('pj-dark-card-d1-0', my.pj_dark_card_d1_0);
+                            scrambleText('pj-dark-card-t1-1', my.pj_dark_card_t1_1);
+                            scrambleText('pj-dark-card-d1-1', my.pj_dark_card_d1_1);
+                        } else if (activeIdx === 2) {
+                            scrambleText('pj-dark-slide-t2', my.pj_dark_slide_t2);
+                            scrambleText('pj-dark-card-t2-0', my.pj_dark_card_t2_0);
+                            scrambleText('pj-dark-card-d2-0', my.pj_dark_card_d2_0);
+                            scrambleText('pj-dark-card-t2-1', my.pj_dark_card_t2_1);
+                            scrambleText('pj-dark-card-d2-1', my.pj_dark_card_d2_1);
+                        }
+
+                        const activeSlideEl = document.getElementById(`dark-slide-${activeIdx}`);
+                        if (activeSlideEl) {
+                            const slideCanvases = activeSlideEl.querySelectorAll('.pixel-grid-canvas');
+                            slideCanvases.forEach(canvas => {
+                                if (canvas.animInstance) {
+                                    canvas.animInstance.triggerTransition();
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+        });
+
+        darkTl.set('#dark-slide-0', { opacity: 0, pointerEvents: 'none' }, 1.0)
+        .set('#dark-slide-1', { opacity: 1, pointerEvents: 'auto' }, 1.0)
+        .to({}, { duration: 1.0 })
+        .set('#dark-slide-1', { opacity: 0, pointerEvents: 'none' }, 2.0)
+        .set('#dark-slide-2', { opacity: 1, pointerEvents: 'auto' }, 2.0)
+        .to({}, { duration: 1.0 })
+        .to('#dark-slide-2', { opacity: 0, pointerEvents: 'none', duration: 0.4 }, 3.0)
+        .to(darkExpander, {
+            width: initWidth,
+            height: initHeight,
+            borderRadius: initRadius,
+            duration: 1.2,
+            ease: 'power2.inOut'
+        }, 3.0)
+        .to('#pj-dark-expander-label', {
+            opacity: 1,
+            scale: 1,
+            duration: 1.0,
+            ease: 'power2.out'
+        }, 3.2);
+
+        gsap.to('#expander-label-text', {
+            y: -5,
+            duration: 1.6,
+            repeat: -1,
+            yoyo: true,
+            ease: 'sine.inOut'
+        });
+    }
+
+    const darkCards = document.querySelectorAll('.dark-project-card');
+    const darkCursor = document.querySelector('[data-dark-cursor]');
+
+    if (darkCards.length && darkCursor) {
+        if (!window.matchMedia('(pointer: coarse)').matches) {
+            gsap.set(darkCursor, { xPercent: -50, yPercent: -50, scale: 0, opacity: 0 });
+
+            window.addEventListener('pointermove', (e) => {
+                gsap.set(darkCursor, { x: e.clientX, y: e.clientY });
+            });
+
+            darkCards.forEach(card => {
+                card.addEventListener('pointerenter', () => {
+                    gsap.killTweensOf(darkCursor);
+                    gsap.to(darkCursor, { scale: 1, opacity: 1, duration: 0.2, ease: 'power2.out' });
+                });
+
+                card.addEventListener('pointerleave', () => {
+                    gsap.killTweensOf(darkCursor);
+                    gsap.to(darkCursor, { scale: 0, opacity: 0, duration: 0.2, ease: 'power2.in' });
+                });
+
+                card.addEventListener('click', () => {
+                    lenis.scrollTo('#interactive-footer', { duration: 1.2 });
+                });
+            });
+        } else {
+            gsap.set(darkCursor, { display: 'none' });
+        }
+    }
+
+    const canvases = document.querySelectorAll('.pixel-grid-canvas');
+    if (canvases.length) {
+        const anims = [];
+        canvases.forEach(canvas => {
+            const context = canvas.getAttribute('data-context');
+            if (context) {
+                const anim = new PixelGridAnimation(canvas, context);
+                canvas.animInstance = anim;
+                anims.push(anim);
+            }
+        });
+        
+        let lastTime = 0;
+        const fps = 30;
+        const interval = 1000 / fps;
+        
+        const tick = (time) => {
+            requestAnimationFrame(tick);
+            const delta = time - lastTime;
+            if (delta > interval) {
+                lastTime = time - (delta % interval);
+                anims.forEach(anim => anim.update());
+            }
+        };
+        requestAnimationFrame(tick);
+    }
+});
