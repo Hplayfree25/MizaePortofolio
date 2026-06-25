@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Star-Delta Starter</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="star-delta.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Outfit', 'sans-serif'] },
+                }
+            }
+        }
+    </script>
+</head>
+<body class="antialiased selection:bg-blue-500/20 selection:text-blue-300 relative min-h-screen pb-32">
+    <header class="fixed inset-x-0 top-0 z-50 px-6 pt-6 sm:px-10">
+        <div class="mx-auto w-full max-w-4xl">
+            <div class="flex h-12 items-center justify-between">
+                <a href="index.html#pj" class="back-btn flex items-center gap-2 text-xs font-bold uppercase tracking-widest">
+                    <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    Back
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="pt-32 px-6 sm:px-10">
+        <article class="mx-auto w-full max-w-3xl">
+            <header class="mb-16">
+                <div class="title-reveal text-xs font-bold uppercase tracking-[0.2em] text-zinc-500 mb-3">June 2026 &mdash; Systems & Automation</div>
+                <h1 class="title-reveal text-4xl sm:text-5xl font-black text-white tracking-tight leading-none uppercase">Star-Delta Starter</h1>
+                <p class="title-reveal mt-6 text-base sm:text-lg text-zinc-400 font-normal leading-relaxed">
+                    A physical system built to safeguard industrial power lines by managing the starting current load of induction motors.
+                </p>
+            </header>
+
+            <div class="title-reveal mb-12 flex items-center gap-4 bg-zinc-900/30 border border-zinc-850 rounded-2xl p-6">
+                <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-500/10 border border-blue-500/20">
+                    <span class="text-lg font-black text-blue-400">98</span>
+                </div>
+                <div>
+                    <span class="block text-[10px] font-bold uppercase tracking-wider text-zinc-500">Evaluation Score</span>
+                    <p class="mt-1 text-sm text-zinc-300 font-medium leading-relaxed">
+                        This practical circuit installation was awarded a score of <strong class="text-white font-bold">98/100</strong> by the evaluating instructor, recognizing the wiring accuracy, structural layout, and safety interlocking execution.
+                    </p>
+                </div>
+            </div>
+
+            <section class="section-reveal mb-16">
+                <p class="editorial-paragraph">
+                    Industrial electric motors draw large amounts of starting current. Directly starting a motor can draw up to eight times its running current, resulting in significant voltage drops in the power lines.
+                </p>
+                <p class="editorial-paragraph">
+                    This project utilizes the Star-Delta starting method to address this surge. By connecting the motor in a Star configuration at startup, the voltage across each winding is reduced, limiting the starting current and torque to 33%. Once the motor reaches speed, it transitions to a Delta connection for full operational power.
+                </p>
+            </section>
+
+            <section class="section-reveal">
+                <h2 class="editorial-sec-title">Project Gallery</h2>
+                <p class="editorial-paragraph">
+                    Visual blueprints and component configurations used to build and verify the physical control panel.
+                </p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 my-8">
+                    <div class="group flex flex-col">
+                        <div class="overflow-hidden rounded-2xl bg-zinc-900/40 border border-zinc-850 aspect-[4/3] relative">
+                            <img src="public/elec.png" alt="My Schema" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <span class="block text-xs font-bold text-white mt-3 uppercase tracking-wide">My Schema</span>
+                        <span class="block text-[11px] text-zinc-400 leading-normal mt-1">Detailed power and control circuit schematic.</span>
+                    </div>
+
+                    <div class="group flex flex-col">
+                        <div class="overflow-hidden rounded-2xl bg-zinc-900/40 border border-zinc-850 aspect-[4/3] relative">
+                            <img src="public/pj1.webp" alt="Panel Wiring" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <span class="block text-xs font-bold text-white mt-3 uppercase tracking-wide">Panel Assembly</span>
+                        <span class="block text-[11px] text-zinc-400 leading-normal mt-1">Physical component wiring and cable trunking.</span>
+                    </div>
+
+                    <div class="group flex flex-col">
+                        <div class="overflow-hidden rounded-2xl bg-zinc-900/40 border border-zinc-850 aspect-[4/3] relative">
+                            <img src="public/repbac.jfif" alt="PLC Configuration" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <span class="block text-xs font-bold text-white mt-3 uppercase tracking-wide">PLC Logic</span>
+                        <span class="block text-[11px] text-zinc-400 leading-normal mt-1">Smart relay programming and interlocking setup.</span>
+                    </div>
+                </div>
+            </section>
+        </article>
+    </main>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        const lenis = new Lenis();
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+
+        gsap.to('.title-reveal', {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            stagger: 0.1,
+            ease: 'power3.out'
+        });
+
+        gsap.utils.toArray('.section-reveal').forEach(section => {
+            gsap.to(section, {
+                scrollTrigger: {
+                    trigger: section,
+                    start: 'top 88%',
+                    toggleActions: 'play none none none'
+                },
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                ease: 'power2.out'
+            });
+        });
+    </script>
+</body>
+</html>

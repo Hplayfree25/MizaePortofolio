@@ -47,7 +47,6 @@
                         <span class="nav-cursor opacity-0" data-nav-cursor></span>
                         <a href="#hr" class="nav-link rounded-full px-5 py-2.5 text-[11px] font-black uppercase tracking-widest text-zinc-500 transition-all duration-300" data-nav-link id="nav-link-home">Home</a>
                         <a href="#sk" class="nav-link rounded-full px-5 py-2.5 text-[11px] font-black uppercase tracking-widest text-zinc-500 transition-all duration-300" data-nav-link id="nav-link-skills">About me</a>
-                        <a href="#pj" class="nav-link rounded-full px-5 py-2.5 text-[11px] font-black uppercase tracking-widest text-zinc-500 transition-all duration-300" data-nav-link id="nav-link-projects">My work</a>
                     </div>
                 </div>
 
@@ -65,7 +64,6 @@
             <div class="px-6 pb-6 pt-3 flex flex-col gap-4 items-center">
                 <a href="#hr" class="nav-link rounded-full px-6 py-3 text-lg font-bold transition-all duration-300" data-nav-link id="nav-link-mobile-home">Home</a>
                 <a href="#sk" class="nav-link rounded-full px-6 py-3 text-lg font-bold transition-all duration-300" data-nav-link id="nav-link-mobile-skills">About me</a>
-                <a href="#pj" class="nav-link rounded-full px-6 py-3 text-lg font-bold transition-all duration-300" data-nav-link id="nav-link-mobile-projects">My work</a>
             </div>
         </div>
     </div>
@@ -160,160 +158,7 @@
     </div>
 </section>
 
-<section id="pj" class="relative z-10 min-h-screen flex items-center justify-center py-12">
-    <div class="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-24">
-        <div class="project-pinned-container flex flex-col md:flex-row items-center justify-between gap-8 md:gap-16 w-full relative">
-            <div class="project-titles-col w-full md:w-1/2 flex flex-col justify-center items-start gap-5 md:gap-8 select-none">
-                <p id="pj-subheadline" class="text-xs md:text-sm font-semibold tracking-wider text-zinc-400 uppercase mb-2"></p>
-                <button type="button" class="project-title-btn text-left group focus:outline-none w-full" data-index="0">
-                    <span class="project-title-text text-3xl md:text-5xl font-black uppercase tracking-tight transition-all duration-300 block">Electrical</span>
-                </button>
-                <button type="button" class="project-title-btn text-left group focus:outline-none w-full" data-index="1">
-                    <span class="project-title-text text-3xl md:text-5xl font-black uppercase tracking-tight transition-all duration-300 block">Backend System</span>
-                </button>
-                <button type="button" class="project-title-btn text-left group focus:outline-none w-full" data-index="2">
-                    <span class="project-title-text text-3xl md:text-5xl font-black uppercase tracking-tight transition-all duration-300 block">Web Design</span>
-                </button>
-            </div>
 
-            <div class="project-image-window-wrapper w-full md:w-1/2 aspect-[4/3] max-w-[420px] relative rounded-[1.75rem] overflow-hidden bg-zinc-100 border border-zinc-200/50 shadow-[0_20px_50px_rgba(0,0,0,0.03)]" data-project-image-box>
-                <div class="project-image-slide absolute inset-0 w-full h-full z-10" data-slide="0">
-                    <img id="pj-img-0" src="public/elec.png" alt="Electrical" class="h-full w-full object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
-                </div>
-                <div class="project-image-slide absolute inset-0 w-full h-full z-10 opacity-0" data-slide="1">
-                    <img id="pj-img-1" src="public/back.webp" alt="Backend System" class="h-full w-full object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
-                </div>
-                <div class="project-image-slide absolute inset-0 w-full h-full z-10 opacity-0" data-slide="2">
-                    <img id="pj-img-2" src="public/web.webp" alt="Web Design" class="h-full w-full object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
-                </div>
-
-                <div class="absolute inset-0 bg-blue-600 z-20 pointer-events-none" data-project-overlay></div>
-
-                <div class="custom-project-cursor absolute top-0 left-0 w-24 h-24 bg-zinc-950/90 text-white rounded-full flex flex-col items-center justify-center text-center p-2 opacity-0 pointer-events-none z-30 shadow-lg" data-custom-cursor>
-                    <span id="cursor-label-text" class="text-[10px] font-black uppercase tracking-wider leading-tight">View Work<br>Below</span>
-                    <svg class="h-4 w-4 mt-1 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 13l-7 7-7-7m7-7v14"></path>
-                    </svg>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section id="pj-dark-section" class="relative z-20 w-full min-h-screen bg-transparent flex items-center justify-center overflow-hidden py-0">
-    <div id="pj-dark-expander" class="w-[90%] md:w-[75%] h-[50vh] md:h-[65vh] bg-zinc-950 rounded-[2rem] md:rounded-[3.5rem] shadow-[0_30px_80px_rgba(0,0,0,0.15)] flex items-center justify-center relative overflow-hidden origin-center">
-        <div id="pj-dark-expander-label" class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none select-none z-20">
-            <span id="expander-label-text" class="text-xs md:text-sm font-black uppercase tracking-[0.35em] text-white/90">My Works</span>
-            <svg class="h-4 w-4 mt-2.5 text-white/50 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 13l-7 7-7-7m7-7v14"></path>
-            </svg>
-        </div>
-        <div class="pj-dark-slides-container relative w-full h-full max-w-5xl flex items-center justify-center z-10 px-4 md:px-12 py-6 md:py-10">
-            <div class="pj-dark-slide absolute inset-x-4 md:inset-x-12 flex flex-col justify-center items-start select-none opacity-0 pointer-events-none" id="dark-slide-0">
-                <div class="flex flex-col">
-                    <h3 class="text-2xl md:text-5xl font-black text-white uppercase tracking-tight" id="pj-dark-slide-t0">Electrical System</h3>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 w-full mt-6 md:mt-10">
-                    <div class="dark-project-card group/card relative rounded-[1.75rem] overflow-hidden bg-zinc-900/30 border border-zinc-800/60 p-5 md:p-7 flex flex-col justify-between transition-all duration-300 hover:bg-zinc-900/55 hover:border-zinc-600/60 hover:shadow-[0_20px_40px_rgba(0,0,0,0.5),0_0_30px_rgba(59,130,246,0.05)] aspect-[2/1] md:aspect-[16/10] md:cursor-none" data-card-idx="0">
-                        <div class="absolute inset-0 z-0 overflow-hidden">
-                            <img src="public/elec.png" alt="Star Delta" class="w-full h-full object-cover opacity-0 transition-all duration-700 ease-out group-hover/card:scale-105 group-hover/card:opacity-40">
-                            <div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/50 to-zinc-950/10"></div>
-                        </div>
-                        <div class="relative z-10 flex justify-between items-start w-full">
-                            <canvas class="pixel-grid-canvas w-12 h-12 md:w-14 md:h-14 opacity-75 group-hover/card:opacity-100 group-hover/card:scale-105 transition-all duration-300 rounded-lg" data-context="star-delta"></canvas>
-                        </div>
-                        <div class="relative z-10 mt-2">
-                            <h4 class="text-base md:text-xl font-black text-white uppercase tracking-wide" id="pj-dark-card-t0-0">Star-Delta Starter</h4>
-                            <p class="text-xs md:text-sm text-zinc-400 font-normal leading-relaxed mt-1.5" id="pj-dark-card-d0-0">Industrial motor power control.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="dark-project-card group/card relative rounded-[1.75rem] overflow-hidden bg-zinc-900/30 border border-zinc-800/60 p-5 md:p-7 flex flex-col justify-between transition-all duration-300 hover:bg-zinc-900/55 hover:border-zinc-600/60 hover:shadow-[0_20px_40px_rgba(0,0,0,0.5),0_0_30px_rgba(59,130,246,0.05)] aspect-[2/1] md:aspect-[16/10] md:cursor-none" data-card-idx="1">
-                        <div class="absolute inset-0 z-0 overflow-hidden">
-                            <img src="public/repbac.jfif" alt="PLC Relay" class="w-full h-full object-cover opacity-0 transition-all duration-700 ease-out group-hover/card:scale-105 group-hover/card:opacity-40">
-                            <div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/50 to-zinc-950/10"></div>
-                        </div>
-                        <div class="relative z-10 flex justify-between items-start w-full">
-                            <canvas class="pixel-grid-canvas w-12 h-12 md:w-14 md:h-14 opacity-75 group-hover/card:opacity-100 group-hover/card:scale-105 transition-all duration-300 rounded-lg" data-context="plc"></canvas>
-                        </div>
-                        <div class="relative z-10 mt-2">
-                            <h4 class="text-base md:text-xl font-black text-white uppercase tracking-wide" id="pj-dark-card-t0-1">PLC Smart Relay</h4>
-                            <p class="text-xs md:text-sm text-zinc-400 font-normal leading-relaxed mt-1.5" id="pj-dark-card-d0-1">Forward-Reverse motor automation.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="pj-dark-slide absolute inset-x-4 md:inset-x-12 flex flex-col justify-center items-start select-none opacity-0 pointer-events-none" id="dark-slide-1">
-                <div class="flex flex-col">
-                    <h3 class="text-2xl md:text-5xl font-black text-white uppercase tracking-tight" id="pj-dark-slide-t1">Backend System</h3>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 w-full mt-6 md:mt-10">
-                    <div class="dark-project-card group/card relative rounded-[1.75rem] overflow-hidden bg-zinc-900/30 border border-zinc-800/60 p-5 md:p-7 flex flex-col justify-between transition-all duration-300 hover:bg-zinc-900/55 hover:border-zinc-600/60 hover:shadow-[0_20px_40px_rgba(0,0,0,0.5),0_0_30px_rgba(59,130,246,0.05)] aspect-[2/1] md:aspect-[16/10] md:cursor-none" data-card-idx="2">
-                        <div class="absolute inset-0 z-0 overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80" alt="REST API" class="w-full h-full object-cover opacity-0 transition-all duration-700 ease-out group-hover/card:scale-105 group-hover/card:opacity-40">
-                            <div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/50 to-zinc-950/10"></div>
-                        </div>
-                        <div class="relative z-10 flex justify-between items-start w-full">
-                            <canvas class="pixel-grid-canvas w-12 h-12 md:w-14 md:h-14 opacity-75 group-hover/card:opacity-100 group-hover/card:scale-105 transition-all duration-300 rounded-lg" data-context="api"></canvas>
-                        </div>
-                        <div class="relative z-10 mt-2">
-                            <h4 class="text-base md:text-xl font-black text-white uppercase tracking-wide" id="pj-dark-card-t1-0">REST API Server</h4>
-                            <p class="text-xs md:text-sm text-zinc-400 font-normal leading-relaxed mt-1.5" id="pj-dark-card-d1-0">High-performance API systems.</p>
-                        </div>
-                    </div>
-                    <div class="dark-project-card group/card relative rounded-[1.75rem] overflow-hidden bg-zinc-900/30 border border-zinc-800/60 p-5 md:p-7 flex flex-col justify-between transition-all duration-300 hover:bg-zinc-900/55 hover:border-zinc-600/60 hover:shadow-[0_20px_40px_rgba(0,0,0,0.5),0_0_30px_rgba(59,130,246,0.05)] aspect-[2/1] md:aspect-[16/10] md:cursor-none" data-card-idx="3">
-                        <div class="absolute inset-0 z-0 overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1544383835-bda2bc66a55d?auto=format&fit=crop&w=800&q=80" alt="Database" class="w-full h-full object-cover opacity-0 transition-all duration-700 ease-out group-hover/card:scale-105 group-hover/card:opacity-40">
-                            <div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/50 to-zinc-950/10"></div>
-                        </div>
-                        <div class="relative z-10 flex justify-between items-start w-full">
-                            <canvas class="pixel-grid-canvas w-12 h-12 md:w-14 md:h-14 opacity-75 group-hover/card:opacity-100 group-hover/card:scale-105 transition-all duration-300 rounded-lg" data-context="db"></canvas>
-                        </div>
-                        <div class="relative z-10 mt-2">
-                            <h4 class="text-base md:text-xl font-black text-white uppercase tracking-wide" id="pj-dark-card-t1-1">Database Architecture</h4>
-                            <p class="text-xs md:text-sm text-zinc-400 font-normal leading-relaxed mt-1.5" id="pj-dark-card-d1-1">Structured database schemas.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="pj-dark-slide absolute inset-x-4 md:inset-x-12 flex flex-col justify-center items-start select-none opacity-0 pointer-events-none" id="dark-slide-2">
-                <div class="flex flex-col">
-                    <h3 class="text-2xl md:text-5xl font-black text-white uppercase tracking-tight" id="pj-dark-slide-t2">Web Design</h3>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 w-full mt-6 md:mt-10">
-                    <div class="dark-project-card group/card relative rounded-[1.75rem] overflow-hidden bg-zinc-900/30 border border-zinc-800/60 p-5 md:p-7 flex flex-col justify-between transition-all duration-300 hover:bg-zinc-900/55 hover:border-zinc-600/60 hover:shadow-[0_20px_40px_rgba(0,0,0,0.5),0_0_30px_rgba(59,130,246,0.05)] aspect-[2/1] md:aspect-[16/10] md:cursor-none" data-card-idx="4">
-                        <div class="absolute inset-0 z-0 overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=800&q=80" alt="Frontend" class="w-full h-full object-cover opacity-0 transition-all duration-700 ease-out group-hover/card:scale-105 group-hover/card:opacity-40">
-                            <div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/50 to-zinc-950/10"></div>
-                        </div>
-                        <div class="relative z-10 flex justify-between items-start w-full">
-                            <canvas class="pixel-grid-canvas w-12 h-12 md:w-14 md:h-14 opacity-75 group-hover/card:opacity-100 group-hover/card:scale-105 transition-all duration-300 rounded-lg" data-context="frontend"></canvas>
-                        </div>
-                        <div class="relative z-10 mt-2">
-                            <h4 class="text-base md:text-xl font-black text-white uppercase tracking-wide" id="pj-dark-card-t2-0">Creative Frontend</h4>
-                            <p class="text-xs md:text-sm text-zinc-400 font-normal leading-relaxed mt-1.5" id="pj-dark-card-d2-0">Interactive user interfaces.</p>
-                        </div>
-                    </div>
-                    <div class="dark-project-card group/card relative rounded-[1.75rem] overflow-hidden bg-zinc-900/30 border border-zinc-800/60 p-5 md:p-7 flex flex-col justify-between transition-all duration-300 hover:bg-zinc-900/55 hover:border-zinc-600/60 hover:shadow-[0_20px_40px_rgba(0,0,0,0.5),0_0_30px_rgba(59,130,246,0.05)] aspect-[2/1] md:aspect-[16/10] md:cursor-none" data-card-idx="5">
-                        <div class="absolute inset-0 z-0 overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80" alt="UIUX" class="w-full h-full object-cover opacity-0 transition-all duration-700 ease-out group-hover/card:scale-105 group-hover/card:opacity-40">
-                            <div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/50 to-zinc-950/10"></div>
-                        </div>
-                        <div class="relative z-10 flex justify-between items-start w-full">
-                            <canvas class="pixel-grid-canvas w-12 h-12 md:w-14 md:h-14 opacity-75 group-hover/card:opacity-100 group-hover/card:scale-105 transition-all duration-300 rounded-lg" data-context="responsive"></canvas>
-                        </div>
-                        <div class="relative z-10 mt-2">
-                            <h4 class="text-base md:text-xl font-black text-white uppercase tracking-wide" id="pj-dark-card-t2-1">Responsive UI/UX</h4>
-                            <p class="text-xs md:text-sm text-zinc-400 font-normal leading-relaxed mt-1.5" id="pj-dark-card-d2-1">Mobile-first digital layouts.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-    </div>
-</section>
 
 <footer id="interactive-footer" class="folder-footer w-full overflow-hidden px-4 pb-16 sm:px-6 lg:px-10">
     <div class="absolute right-0 bottom-0 top-0 w-full md:w-1/2 pointer-events-none flex items-center justify-center overflow-hidden opacity-[0.07]">
@@ -358,7 +203,6 @@
                 <div class="mt-5 grid gap-3">
                     <a href="#hr" id="footer-nav-home" class="footer-link"></a>
                     <a href="#sk" id="footer-nav-skills" class="footer-link"></a>
-                    <a href="#pj" id="footer-nav-projects" class="footer-link"></a>
                 </div>
             </div>
 

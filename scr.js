@@ -1290,32 +1290,41 @@ document.addEventListener('DOMContentLoaded', () => {
     const darkCards = document.querySelectorAll('.dark-project-card');
     const darkCursor = document.querySelector('[data-dark-cursor]');
 
-    if (darkCards.length && darkCursor) {
-        if (!window.matchMedia('(pointer: coarse)').matches) {
-            gsap.set(darkCursor, { xPercent: -50, yPercent: -50, scale: 0, opacity: 0 });
+    if (darkCards.length) {
+        if (darkCursor) {
+            if (!window.matchMedia('(pointer: coarse)').matches) {
+                gsap.set(darkCursor, { xPercent: -50, yPercent: -50, scale: 0, opacity: 0 });
 
-            window.addEventListener('pointermove', (e) => {
-                gsap.set(darkCursor, { x: e.clientX, y: e.clientY });
-            });
-
-            darkCards.forEach(card => {
-                card.addEventListener('pointerenter', () => {
-                    gsap.killTweensOf(darkCursor);
-                    gsap.to(darkCursor, { scale: 1, opacity: 1, duration: 0.2, ease: 'power2.out' });
+                window.addEventListener('pointermove', (e) => {
+                    gsap.set(darkCursor, { x: e.clientX, y: e.clientY });
                 });
 
-                card.addEventListener('pointerleave', () => {
-                    gsap.killTweensOf(darkCursor);
-                    gsap.to(darkCursor, { scale: 0, opacity: 0, duration: 0.2, ease: 'power2.in' });
-                });
+                darkCards.forEach(card => {
+                    card.addEventListener('pointerenter', () => {
+                        gsap.killTweensOf(darkCursor);
+                        gsap.to(darkCursor, { scale: 1, opacity: 1, duration: 0.2, ease: 'power2.out' });
+                    });
 
-                card.addEventListener('click', () => {
-                    lenis.scrollTo('#interactive-footer', { duration: 1.2 });
+                    card.addEventListener('pointerleave', () => {
+                        gsap.killTweensOf(darkCursor);
+                        gsap.to(darkCursor, { scale: 0, opacity: 0, duration: 0.2, ease: 'power2.in' });
+                    });
                 });
-            });
-        } else {
-            gsap.set(darkCursor, { display: 'none' });
+            } else {
+                gsap.set(darkCursor, { display: 'none' });
+            }
         }
+
+        darkCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const canvas = card.querySelector('canvas');
+                if (canvas && canvas.getAttribute('data-context') === 'star-delta') {
+                    window.location.href = 'star-delta.html';
+                } else {
+                    lenis.scrollTo('#interactive-footer', { duration: 1.2 });
+                }
+            });
+        });
     }
 
     const canvases = document.querySelectorAll('.pixel-grid-canvas');
