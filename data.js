@@ -3,9 +3,9 @@ const portfolioData = {
         name: "Revaldo Anjennu Rillif Anderson",
         email: "revaldoanjennurillifanderson@gmail.com",
         photo: "public/prf.webp",
-        nav_home: "Beranda",
-        nav_skills: "Keahlian",
-        nav_projects: "Proyek",
+        nav_home: "Home",
+        nav_skills: "Tentang Saya",
+        nav_projects: "Karya Saya",
         hero_title_1: "Hello I am",
         hero_title_2: "Revaldo Anderson",
         hero_desc: "Saat ini berstatus sebagai Pelajar dan merupakan Mantan Siswa Teknik Instalasi Tenaga Listrik di SMK Kemala Bhayangkari 1 Jakarta",
@@ -49,7 +49,7 @@ const portfolioData = {
         close_detail: "Tutup detail",
         pj_list: [
             {
-                t: "Instalasi Listrik",
+                t: "Electrical System",
                 d: "Perancangan kontrol panel & sistem kelistrikan Star-Delta.",
                 full_d: "Mengembangkan sistem kendali motor industri menggunakan sirkuit Star-Delta dan sirkuit PLC Forward-Reverse berbasis Smart Relay untuk efisiensi daya listrik.",
                 img: "public/elec.png",
@@ -76,8 +76,8 @@ const portfolioData = {
         email: "revaldoanjennurillifanderson@gmail.com",
         photo: "public/prf.webp",
         nav_home: "Home",
-        nav_skills: "Skills",
-        nav_projects: "Projects",
+        nav_skills: "About me",
+        nav_projects: "My work",
         hero_title_1: "Hello I am",
         hero_title_2: "Revaldo Anderson",
         hero_desc: "Currently a Student and previously majored in Electrical Installation Engineering at SMK Kemala Bhayangkari 1 Jakarta",
@@ -121,7 +121,7 @@ const portfolioData = {
         close_detail: "Close detail",
         pj_list: [
             {
-                t: "Electrical Installation",
+                t: "Electrical System",
                 d: "Design of control panels & Star-Delta electrical systems.",
                 full_d: "Developing industrial motor control systems using Star-Delta circuits and Smart Relay-based PLC Forward-Reverse circuits for power efficiency.",
                 img: "public/elec.png",

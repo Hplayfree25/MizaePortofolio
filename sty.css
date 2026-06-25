@@ -259,14 +259,16 @@ body {
 }
 
 .folder-footer {
-    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    background: #a78bfa !important;
     clip-path: polygon(0 0, 12rem 0, 15rem 3rem, 100% 3rem, 100% 100%, 0 100%);
-    padding-top: 5rem;
-    color: #ffffff;
+    padding-top: 6rem;
+    color: #09090b;
+    position: relative;
 }
 
 .folder-footer .footer-link {
-    color: #bfdbfe;
+    color: #09090b;
+    transition: color 220ms ease, transform 220ms ease;
 }
 
 .folder-footer .footer-link:hover {
@@ -274,7 +276,7 @@ body {
 }
 
 .folder-footer .footer-label {
-    color: #93c5fd;
+    color: rgba(9, 9, 11, 0.6);
 }
 
 .professional-footer {
@@ -494,4 +496,75 @@ html.lenis, html.lenis body {
 
 .animate-arrow-ghost {
     animation: arrow-ghost 1.4s infinite ease-in-out;
+}
+
+#main-nav.nav-in-dark .nav-link {
+    color: #a1a1aa;
+}
+
+#main-nav.nav-in-dark .nav-cursor {
+    background-color: #ffffff !important;
+}
+
+@media (min-width: 768px) {
+    #main-nav.nav-in-dark .nav-link.active,
+    #main-nav.nav-in-dark .nav-link:hover {
+        color: #18181b !important;
+        background-color: transparent !important;
+    }
+
+    #main-nav.nav-in-dark .nav-links:hover .nav-link.active {
+        color: #a1a1aa !important;
+    }
+
+    #main-nav.nav-in-dark .nav-links:hover .nav-link.active:hover {
+        color: #18181b !important;
+    }
+}
+
+#main-nav.nav-in-dark .lang-label.text-zinc-800 {
+    color: #ffffff !important;
+}
+
+#main-nav.nav-in-dark .lang-label.text-zinc-400 {
+    color: #71717a !important;
+}
+
+#main-nav.nav-in-dark .lang-label.text-zinc-400:hover {
+    color: #ffffff !important;
+}
+
+#main-nav.nav-in-dark .lang-switch-btn {
+    border-color: #3f3f46 !important;
+    background-color: rgba(39, 39, 42, 0.5) !important;
+}
+
+#main-nav.nav-in-dark .lang-switch-handle {
+    background-color: #ffffff !important;
+    color: #18181b !important;
+}
+
+#main-nav.nav-in-dark .nav-toggle {
+    background-color: rgba(39, 39, 42, 0.5) !important;
+}
+
+#main-nav.nav-in-dark .nav-toggle-icon span {
+    background-color: #ffffff !important;
+    transition: background-color 300ms ease;
+}
+
+@media (max-width: 767px) {
+    #main-nav.nav-in-dark .nav-shell {
+        background-color: rgba(24, 24, 27, 0.9) !important;
+        border-color: rgba(63, 63, 70, 0.4) !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
+    }
+
+    #main-nav.nav-in-dark .nav-mobile .nav-link.active,
+    #main-nav.nav-in-dark .nav-mobile .nav-link:hover {
+        background-color: #ffffff !important;
+        color: #18181b !important;
+    }
 }

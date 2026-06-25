@@ -692,19 +692,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let mainNavTracker = null;
     let langTracker = null;
+    let darkTl = null;
 
     mainNavTracker = initSlidingCursor('[data-nav-links]', '[data-nav-cursor]', '[data-nav-link]');
     langTracker = initSlidingCursor('[data-lang-wrap]', '[data-lang-cursor]', 'a[id^="lang-btn-"]');
 
-    const setActiveNav = (id) => {
-        navLinks.forEach(link => {
-            const active = link.getAttribute('href') === `#${id}`;
-            link.classList.toggle('active', active);
-        });
-        if (mainNavTracker) {
-            mainNavTracker.update();
-        }
-    };
+
 
     if (nav) {
         const updateNavState = () => {
@@ -779,18 +772,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const sections = document.querySelectorAll('section[id]');
-    if (sections.length) {
-        const sectionObserver = new IntersectionObserver((entries) => {
-            const visible = entries
-                .filter(entry => entry.isIntersecting)
-                .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
 
-            if (visible) setActiveNav(visible.target.id);
-        }, { rootMargin: '-35% 0px -45% 0px', threshold: [0.1, 0.35, 0.6] });
-
-        sections.forEach(section => sectionObserver.observe(section));
-    }
 
     const heroStage = document.querySelector('[data-hero-stage]');
     if (heroStage) {
@@ -1039,7 +1021,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 if (index === activeIdx) {
-                    lenis.scrollTo('#interactive-footer', { duration: 1.2 });
+                    const darkTrigger = darkTl ? darkTl.scrollTrigger : null;
+                    if (darkTrigger) {
+                        const start = darkTrigger.start;
+                        const end = darkTrigger.end;
+                        const total = end - start;
+                        let targetScroll = start;
+                        if (index === 1) {
+                            targetScroll = start + total * 0.35;
+                        } else if (index === 2) {
+                            targetScroll = start + total * 0.6;
+                        }
+                        lenis.scrollTo(targetScroll, { duration: 1.5 });
+                    }
                 } else {
                     const start = trigger.start;
                     const end = trigger.end;
@@ -1056,7 +1050,82 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         imageBox.addEventListener('click', () => {
-            lenis.scrollTo('#interactive-footer', { duration: 1.2 });
+            const overlayY = gsap.getProperty(overlay, 'yPercent');
+            if (overlayY === 0) {
+                const existing = document.getElementById('security-toast');
+                if (existing) {
+                    existing.remove();
+                }
+
+                const lang = getLang();
+                const msg = lang === 'id' 
+                    ? 'Perisai Keamanan Aktif — Seluruh koneksi dan data sistem terlindungi secara aman.'
+                    : 'Security Shield Active — All system connections and data are safely protected.';
+
+                const toast = document.createElement('div');
+                toast.id = 'security-toast';
+                toast.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 md:left-auto md:right-6 md:translate-x-0 z-50 flex items-center gap-3 bg-zinc-950/90 border border-blue-500/30 text-white px-5 py-3.5 rounded-2xl shadow-[0_20px_50px_rgba(59,130,246,0.15)] backdrop-blur-md transition-all duration-300 max-w-sm w-[90%] pointer-events-auto select-none';
+                toast.style.opacity = '0';
+                toast.style.transform = 'translate(-50%, 20px)';
+                if (window.innerWidth >= 768) {
+                    toast.style.transform = 'translateY(20px)';
+                }
+
+                toast.innerHTML = `
+                    <svg class="h-6 w-6 text-blue-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                    </svg>
+                    <p class="text-xs font-semibold text-zinc-200 leading-normal">${msg}</p>
+                `;
+
+                document.body.appendChild(toast);
+
+                const isMobile = window.innerWidth < 768;
+                gsap.to(toast, {
+                    opacity: 1,
+                    x: isMobile ? '-50%' : 0,
+                    y: 0,
+                    duration: 0.4,
+                    ease: 'power3.out'
+                });
+
+                setTimeout(() => {
+                    gsap.to(toast, {
+                        opacity: 0,
+                        y: 20,
+                        duration: 0.3,
+                        ease: 'power3.in',
+                        onComplete: () => {
+                            toast.remove();
+                        }
+                    });
+                }, 3000);
+            } else {
+                const trigger = pjTimeline.scrollTrigger;
+                if (trigger) {
+                    const progress = trigger.progress;
+                    let activeIdx = 0;
+                    if (progress > 0.366 && progress <= 0.733) {
+                        activeIdx = 1;
+                    } else if (progress > 0.733) {
+                        activeIdx = 2;
+                    }
+
+                    const darkTrigger = darkTl ? darkTl.scrollTrigger : null;
+                    if (darkTrigger) {
+                        const start = darkTrigger.start;
+                        const end = darkTrigger.end;
+                        const total = end - start;
+                        let targetScroll = start;
+                        if (activeIdx === 1) {
+                            targetScroll = start + total * 0.35;
+                        } else if (activeIdx === 2) {
+                            targetScroll = start + total * 0.6;
+                        }
+                        lenis.scrollTo(targetScroll, { duration: 1.5 });
+                    }
+                }
+            }
         });
 
         if (!window.matchMedia('(pointer: coarse)').matches) {
@@ -1121,13 +1190,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let currentActiveSlide = 0;
 
-        const darkTl = gsap.timeline({
+        darkTl = gsap.timeline({
             scrollTrigger: {
                 trigger: '#pj-dark-section',
                 start: 'top top',
                 end: '+=200%',
                 pin: true,
                 scrub: 0.5,
+                toggleClass: { targets: '#main-nav', className: 'nav-in-dark' },
                 onUpdate: (self) => {
                     const progress = self.progress;
                     let activeIdx = 0;
