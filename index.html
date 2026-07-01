@@ -23,47 +23,47 @@
     </script>
 </head>
 <body class="antialiased selection:bg-blue-200 selection:text-blue-900 relative">
-<nav id="main-nav" class="site-nav fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-6 lg:px-10">
+<nav id="main-nav" class="site-nav fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-5 md:px-6 lg:px-10">
     <div class="nav-shell mx-auto w-full max-w-7xl overflow-hidden rounded-[1.35rem] transition-all duration-300 md:bg-transparent md:border-none md:shadow-none md:backdrop-blur-none bg-zinc-100 border border-zinc-200/50 shadow-[0_10px_30px_rgba(0,0,0,0.03)]">
-        <div class="flex min-h-16 items-center justify-between gap-3 px-4 sm:px-6">
+        <div class="flex min-h-14 md:min-h-16 items-center justify-between gap-2 sm:gap-3 px-3 sm:px-5 md:px-6">
             <div class="flex items-center">
-                <div class="flex items-center gap-2 select-none" id="lang-toggle-wrapper">
-                    <a href="?lang=id" id="lang-btn-id" class="lang-label text-[11px] font-black tracking-widest transition-colors duration-300 text-zinc-400 hover:text-zinc-800">ID</a>
-                    <button type="button" class="lang-switch-btn relative w-12 h-7 rounded-full border border-zinc-200 bg-zinc-100/50 transition-colors duration-300 focus:outline-none flex items-center px-0.5" id="lang-toggle-btn" aria-label="Toggle Language">
-                        <span class="lang-switch-handle w-5.5 h-5.5 rounded-full bg-zinc-800 flex items-center justify-center text-white transform" id="lang-handle">
-                            <svg class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <div class="lang-wrap flex items-center gap-1.5 sm:gap-2 select-none" id="lang-toggle-wrapper" data-lang-wrap>
+                    <a href="?lang=id" id="lang-btn-id" class="lang-label text-[11px] font-black tracking-widest transition-colors duration-300 text-zinc-400 hover:text-zinc-800" aria-label="Indonesian">ID</a>
+                    <button type="button" class="lang-switch-btn relative w-11 h-6.5 sm:w-12 sm:h-7 rounded-full border border-zinc-200 bg-zinc-100/50 transition-colors duration-300 focus:outline-none flex items-center px-0.5" id="lang-toggle-btn" aria-label="Toggle Language">
+                        <span class="lang-switch-handle w-5 h-5 rounded-full bg-zinc-800 flex items-center justify-center text-white transform will-change-transform" id="lang-handle">
+                            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                                 <circle cx="12" cy="12" r="10"></circle>
                                 <path d="M12 2a14.5 14.5 0 0 0 0 20M12 2a14.5 14.5 0 0 1 0 20M2 12h20"></path>
                             </svg>
                         </span>
                     </button>
-                    <a href="?lang=en" id="lang-btn-en" class="lang-label text-[11px] font-black tracking-widest transition-colors duration-300 text-zinc-400 hover:text-zinc-800">EN</a>
+                    <a href="?lang=en" id="lang-btn-en" class="lang-label text-[11px] font-black tracking-widest transition-colors duration-300 text-zinc-400 hover:text-zinc-800" aria-label="English">EN</a>
                 </div>
             </div>
 
-            <div class="flex items-center gap-3">
+                <div class="flex items-center gap-3">
                 <div class="nav-desktop hidden items-center gap-3 md:flex">
                     <div class="nav-links relative flex items-center gap-1 bg-transparent p-0" data-nav-links>
                         <span class="nav-cursor opacity-0" data-nav-cursor></span>
-                        <a href="#hr" class="nav-link rounded-full px-5 py-2.5 text-[11px] font-black uppercase tracking-widest text-zinc-500 transition-all duration-300" data-nav-link id="nav-link-home">Home</a>
-                        <a href="#sk" class="nav-link rounded-full px-5 py-2.5 text-[11px] font-black uppercase tracking-widest text-zinc-500 transition-all duration-300" data-nav-link id="nav-link-skills">About me</a>
+                        <a href="#hr" class="nav-link rounded-full px-5 py-2.5 text-[11px] font-black uppercase tracking-widest text-zinc-500 transition-all duration-300" data-nav-link data-nav-target="hr" id="nav-link-home">Home</a>
+                        <a href="#sk" class="nav-link rounded-full px-5 py-2.5 text-[11px] font-black uppercase tracking-widest text-zinc-500 transition-all duration-300" data-nav-link data-nav-target="sk" id="nav-link-skills">About me</a>
                     </div>
                 </div>
 
-                <button type="button" class="nav-toggle group relative z-20 flex h-11 w-11 shrink-0 items-center justify-center transition-all duration-300 md:hidden" data-nav-toggle aria-label="Menu" aria-expanded="false" style="background-color: rgb(250, 247, 243); border-radius: 8px;">
+                <button type="button" class="nav-toggle group relative z-20 flex h-11 w-11 shrink-0 items-center justify-center transition-all duration-300 md:hidden" data-nav-toggle aria-label="Menu" aria-expanded="false" aria-controls="nav-panel">
                     <div class="nav-toggle-icon">
                         <span class="line-1"></span>
                         <span class="line-2"></span>
                         <span class="line-3"></span>
                     </div>
                 </button>
-            </div>
+                </div>
         </div>
 
-        <div class="nav-mobile overflow-hidden opacity-0 pointer-events-none md:hidden h-0" data-nav-panel>
+        <div class="nav-mobile overflow-hidden opacity-0 pointer-events-none md:hidden h-0" data-nav-panel id="nav-panel">
             <div class="px-6 pb-6 pt-3 flex flex-col gap-4 items-center">
-                <a href="#hr" class="nav-link rounded-full px-6 py-3 text-lg font-bold transition-all duration-300" data-nav-link id="nav-link-mobile-home">Home</a>
-                <a href="#sk" class="nav-link rounded-full px-6 py-3 text-lg font-bold transition-all duration-300" data-nav-link id="nav-link-mobile-skills">About me</a>
+                <a href="#hr" class="nav-link rounded-full px-6 py-3 text-lg font-bold transition-all duration-300" data-nav-link data-nav-target="hr" id="nav-link-mobile-home">Home</a>
+                <a href="#sk" class="nav-link rounded-full px-6 py-3 text-lg font-bold transition-all duration-300" data-nav-link data-nav-target="sk" id="nav-link-mobile-skills">About me</a>
             </div>
         </div>
     </div>

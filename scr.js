@@ -397,7 +397,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (urlLang === 'en' || urlLang === 'id') {
             return urlLang;
         }
+        try {
+            const stored = localStorage.getItem('portfolio-lang');
+            if (stored === 'en' || stored === 'id') return stored;
+        } catch (e) {}
         return 'en';
+    };
+
+    const persistLang = (lang) => {
+        try { localStorage.setItem('portfolio-lang', lang); } catch (e) {}
     };
 
     const renderLocalization = () => {
@@ -414,7 +422,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const updateRollLink = (id, text) => {
             const el = document.getElementById(id);
             if (el) {
-                el.innerHTML = `<span class="nav-link-inner"><span class="nav-link-text">${text}</span><span class="nav-link-text-hover">${text}</span></span>`;
+                el.setAttribute('aria-label', text);
+                const isMobile = el.closest('.nav-mobile');
+                if (isMobile) {
+                    el.textContent = text;
+                } else {
+                    el.innerHTML = `<span class="nav-link-inner" aria-hidden="true"><span class="nav-link-text">${text}</span><span class="nav-link-text-hover">${text}</span></span>`;
+                }
             }
         };
         updateRollLink('nav-link-home', my.nav_home);
@@ -427,6 +441,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const btnId = document.getElementById('lang-btn-id');
         const btnEn = document.getElementById('lang-btn-en');
         const handle = document.getElementById('lang-handle');
+        const langBtn = document.getElementById('lang-toggle-btn');
+
+        const setLangHandle = (toId) => {
+            if (!handle) return;
+            const btnEl = document.getElementById('lang-toggle-btn');
+            if (!btnEl) return;
+            const btnRect = btnEl.getBoundingClientRect();
+            const handleRect = handle.getBoundingClientRect();
+            // Start position is always px-0.5 (2px)
+            const travel = btnRect.width - handleRect.width - 4;
+            const targetX = toId ? 0 : Math.max(0, travel);
+            gsap.to(handle, { x: targetX, duration: 0.45, ease: 'power3.out', overwrite: 'auto' });
+        };
 
         if (btnId && btnEn && handle) {
             const globeSvg = handle.querySelector('svg');
@@ -435,15 +462,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 btnId.classList.remove('text-zinc-400');
                 btnEn.classList.add('text-zinc-400');
                 btnEn.classList.remove('text-zinc-800');
-                gsap.to(handle, { x: 0, duration: 0.4, ease: 'back.out(1.5)' });
-                if (globeSvg) gsap.to(globeSvg, { rotation: 0, duration: 0.45, ease: 'power2.out' });
+                setLangHandle(true);
+                if (globeSvg) gsap.to(globeSvg, { rotation: 0, duration: 0.5, ease: 'power2.out', overwrite: 'auto' });
             } else {
                 btnId.classList.add('text-zinc-400');
                 btnId.classList.remove('text-zinc-800');
                 btnEn.classList.add('text-zinc-800');
                 btnEn.classList.remove('text-zinc-400');
-                gsap.to(handle, { x: 28, duration: 0.4, ease: 'back.out(1.5)' });
-                if (globeSvg) gsap.to(globeSvg, { rotation: 360, duration: 0.45, ease: 'power2.out' });
+                setLangHandle(false);
+                if (globeSvg) gsap.to(globeSvg, { rotation: 360, duration: 0.5, ease: 'power2.out', overwrite: 'auto' });
             }
         }
 
@@ -577,12 +604,14 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             
             // springy click squeeze
-            gsap.fromTo(toggleBtn, { scale: 0.9 }, { scale: 1.08, duration: 0.3, ease: 'back.out(2.0)' });
+            gsap.fromTo(toggleBtn, { scale: 0.9 }, { scale: 1.08, duration: 0.3, ease: 'back.out(2.0)', overwrite: 'auto' });
+            gsap.to(toggleBtn, { scale: 1, duration: 0.4, ease: 'power2.out', delay: 0.3, overwrite: 'auto' });
             
-            const currentLang = document.documentElement.lang || 'id';
+            const currentLang = document.documentElement.lang || 'en';
             const nextLang = currentLang === 'id' ? 'en' : 'id';
             const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?lang=' + nextLang;
             window.history.pushState({ path: newUrl }, '', newUrl);
+            persistLang(nextLang);
             renderLocalization();
 
             // spring active label highlight
@@ -598,13 +627,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (el) {
             el.addEventListener('click', (e) => {
                 e.preventDefault();
-                const currentLang = document.documentElement.lang || 'id';
+                const currentLang = document.documentElement.lang || 'en';
                 if (currentLang !== targetLang) {
                     // spring active label highlight on click
                     gsap.fromTo(el, { scale: 0.8 }, { scale: 1, duration: 0.4, ease: 'back.out(2.0)' });
                     
                     const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?lang=' + targetLang;
                     window.history.pushState({ path: newUrl }, '', newUrl);
+                    persistLang(targetLang);
                     renderLocalization();
                 }
             });
@@ -623,6 +653,52 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { threshold: 0.1 });
 
     reveals.forEach(el => observer.observe(el));
+
+    const initScrollSpy = () => {
+        const navLinkEls = Array.from(document.querySelectorAll('[data-nav-link][data-nav-target]'));
+        if (!navLinkEls.length) return;
+
+        const sections = [];
+        navLinkEls.forEach(link => {
+            const id = link.getAttribute('data-nav-target');
+            const sec = document.getElementById(id);
+            if (sec) sections.push({ id, el: sec, links: navLinkEls.filter(l => l.getAttribute('data-nav-target') === id) });
+        });
+        if (!sections.length) return;
+
+        let currentId = null;
+
+        const setActive = (id, fromClick) => {
+            if (currentId === id && !fromClick) return;
+            currentId = id;
+            navLinkEls.forEach(l => {
+                const isMatch = l.getAttribute('data-nav-target') === id;
+                l.classList.toggle('active', isMatch);
+            });
+            if (mainNavTracker) mainNavTracker.update();
+        };
+
+        const spy = new IntersectionObserver((entries) => {
+            let best = null;
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const found = sections.find(s => s.el === entry.target);
+                    if (found && (!best || entry.intersectionRatio > best.ratio)) {
+                        best = { id: found.id, ratio: entry.intersectionRatio };
+                    }
+                }
+            });
+            if (best) setActive(best.id);
+        }, {
+            rootMargin: '-45% 0px -50% 0px',
+            threshold: [0, 0.1, 0.25, 0.5, 0.75, 1]
+        });
+
+        sections.forEach(s => spy.observe(s.el));
+        setActive(sections[0].id, true);
+
+        return { setActive, refresh: () => setActive(currentId) };
+    };
 
     const initSlidingCursor = (wrapSelector, cursorSelector, linkSelector) => {
         const wrap = document.querySelector(wrapSelector);
@@ -693,9 +769,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let mainNavTracker = null;
     let langTracker = null;
     let darkTl = null;
+    let scrollSpy = null;
 
     mainNavTracker = initSlidingCursor('[data-nav-links]', '[data-nav-cursor]', '[data-nav-link]');
     langTracker = initSlidingCursor('[data-lang-wrap]', '[data-lang-cursor]', 'a[id^="lang-btn-"]');
+
+    scrollSpy = initScrollSpy();
 
 
 
@@ -706,6 +785,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
         updateNavState();
         window.addEventListener('scroll', updateNavState, { passive: true });
+
+        let lastScrollY = window.scrollY;
+        let hideTimer = null;
+        const onScrollHide = () => {
+            const y = window.scrollY;
+            if (hideTimer) cancelAnimationFrame(hideTimer);
+            hideTimer = requestAnimationFrame(() => {
+                const goingDown = y > lastScrollY;
+                const pastHero = y > window.innerHeight * 0.6;
+                if (goingDown && pastHero && y - lastScrollY > 6) {
+                    nav.classList.add('nav-hidden');
+                } else if (!goingDown && lastScrollY - y > 4) {
+                    nav.classList.remove('nav-hidden');
+                }
+                lastScrollY = y;
+            });
+        };
+        window.addEventListener('scroll', onScrollHide, { passive: true });
+
+        window.addEventListener('resize', () => {
+            nav.classList.remove('nav-hidden');
+        }, { passive: true });
     }
 
     if (nav && navToggle && navPanel) {
@@ -732,7 +833,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 gsap.killTweensOf(navPanel);
                 gsap.fromTo(navPanel, 
                     { height: 0, opacity: 0, scale: 0.95 },
-                    { height: "auto", opacity: 1, scale: 1, duration: 0.6, ease: "power3.out", pointerEvents: "auto" }
+                    { height: "auto", opacity: 1, scale: 1, duration: 0.6, ease: "power3.out", pointerEvents: "auto", clearProps: "scale" }
                 );
             } else {
                 hamburgerTl.reverse();
@@ -740,7 +841,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 gsap.to(navPanel, { 
                     height: 0, 
                     opacity: 0, 
-                    scale: 0.95, 
                     duration: 0.4, 
                     ease: "power3.inOut", 
                     pointerEvents: "none" 
@@ -748,7 +848,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        navToggle.addEventListener('click', () => {
+        navToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
             toggleMenu(!menuOpen);
         });
 
@@ -764,11 +865,25 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         navLinks.forEach(link => {
-            link.addEventListener('click', () => {
+            link.addEventListener('click', (e) => {
+                const targetId = link.getAttribute('data-nav-target');
+                if (targetId && lenis) {
+                    const target = document.getElementById(targetId);
+                    if (target) {
+                        e.preventDefault();
+                        lenis.scrollTo(target, { duration: 1.0, offset: -10 });
+                    }
+                }
+                if (scrollSpy && targetId) scrollSpy.setActive(targetId, true);
                 if (menuOpen) {
                     toggleMenu(false);
                 }
             });
+        });
+
+        const matchDesktop = window.matchMedia('(min-width: 768px)');
+        matchDesktop.addEventListener('change', (e) => {
+            if (e.matches && menuOpen) toggleMenu(false);
         });
     }
 

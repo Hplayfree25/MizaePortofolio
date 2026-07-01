@@ -44,13 +44,18 @@ body {
 }
 
 .site-nav {
-    transition: transform 360ms ease, opacity 360ms ease;
+    transition: transform 360ms cubic-bezier(0.16, 1, 0.3, 1), opacity 360ms ease;
+    padding-top: max(0.75rem, env(safe-area-inset-top));
 }
 
 .site-nav.nav-hidden {
     opacity: 0;
     pointer-events: none;
     transform: translateY(-120%);
+}
+
+.site-nav.scrolled .nav-shell {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
 }
 
 .nav-shell {
@@ -66,6 +71,7 @@ body {
     z-index: 10;
     color: #71717a;
     transition: color 300ms ease;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .nav-link.active,
@@ -97,6 +103,14 @@ body {
     }
 }
 
+.nav-mobile .nav-link {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-tap-highlight-color: transparent;
+}
+
 .nav-mobile .nav-link.active,
 .nav-mobile .nav-link:hover {
     background-color: #18181b !important;
@@ -109,6 +123,16 @@ body {
     border-radius: 9999px;
     pointer-events: none;
     z-index: 0;
+}
+
+.nav-toggle {
+    background-color: #faf7f3;
+    border-radius: 10px;
+    transition: background-color 300ms ease, transform 200ms ease;
+}
+
+.nav-toggle:active {
+    transform: scale(0.92);
 }
 
 .nav-toggle-icon {
@@ -124,6 +148,7 @@ body {
     background-color: #111111;
     border-radius: 9999px;
     top: 5px;
+    transition: left 0.3s ease, top 0.3s ease, width 0.3s ease, height 0.3s ease, opacity 0.3s ease, rotation 0.3s ease;
 }
 
 .nav-toggle-icon .line-1 {
@@ -145,6 +170,11 @@ body {
     vertical-align: middle;
     height: 1.25em;
     line-height: 1.25em;
+}
+
+.nav-mobile .nav-link .nav-link-inner {
+    height: auto;
+    line-height: 1.5;
 }
 
 .nav-link-text {
@@ -171,11 +201,35 @@ body {
     transform: translateY(-100%);
 }
 
+.nav-mobile .nav-link:hover .nav-link-text,
+.nav-mobile .nav-link.active .nav-link-text {
+    transform: translateY(0);
+}
+
+.nav-mobile .nav-link:hover .nav-link-text-hover,
+.nav-mobile .nav-link.active .nav-link-text-hover {
+    transform: translateY(0);
+}
+
+.lang-wrap {
+    -webkit-tap-highlight-color: transparent;
+}
+
+.lang-switch-handle {
+    transition: none;
+    will-change: transform;
+}
+
 @media (max-width: 767px) {
     .site-nav .nav-shell {
         background-color: #f4f4f5;
         border-color: #e4e4e7;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    }
+
+    .site-nav.menu-open .nav-shell {
+        background-color: #f4f4f5;
+        border-color: #e4e4e7;
     }
 }
 
